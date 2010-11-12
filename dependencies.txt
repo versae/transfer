@@ -1,0 +1,4 @@
+Linux:
+------
+
+    $ sudo aptitude install libjpeg libjpeg-dev

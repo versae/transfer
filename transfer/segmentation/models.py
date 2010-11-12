@@ -6,8 +6,8 @@ WORKFLOW_STATUS = (
     ('I', u'Initial'),
     ('P', u'Preprocessed'),
     ('F', u'Filtered'),
-    ('C', u'Cleaned tab-stops'),
-    ('L', u'Found the column layout'),
+    ('T', u'Tab-stops'),
+    ('C', u'Column layout'),
     ('R', u'Final regions'),
 )
 
@@ -15,6 +15,8 @@ WORKFLOW_STATUS = (
 class Image(models.Model):
     title = models.CharField(_(u'Title'), max_length=200)
     image = models.ImageField(_(u'Image'), upload_to='images')
+    image_preprocessed = models.ImageField(_(u'Image'), upload_to='images',
+                                          blank=True, null=True)
     image_mask = models.ImageField(_(u'Image mask'), upload_to='images',
                                   blank=True, null=True)
     image_vertical_lines = models.ImageField(_(u'Image vertical lines'),
@@ -28,8 +30,27 @@ class Image(models.Model):
                                   blank=True, null=True)
     large_ccs = models.TextField(_(u'Large Connected Components'),
                                  blank=True, null=True)
-    regions = models.TextField(_(u'Final regions'), blank=True, null=True)
+    final_regions = models.TextField(_(u'Final regions'), blank=True,
+                                     null=True)
     notes = models.TextField(_(u'Notes'), blank=True, null=True)
 
     def __unicode__(self):
         return u"%s (%s)" % (self.title, self.image.url)
+
+    def get_initial(self):
+        return self.objects.filter(status="I")
+
+    def get_preprocessed(self):
+        return self.objects.filter(status="P")
+
+    def get_filtered(self):
+        return self.objects.filter(status="F")
+
+    def get_tab_stops(self):
+        return self.objects.filter(status="T")
+
+    def get_colum_layout(self):
+        return self.objects.filter(status="C")
+
+    def get_final(self):
+        return self.objects.filter(status="R")
