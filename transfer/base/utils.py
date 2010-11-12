@@ -30,8 +30,9 @@ def find_regions(im):
     # First pass. Find regions.
     for x in xrange(width):
         for y in xrange(height):
+            print im.getpixel((x, y))
             # Look for a black pixel
-            if im.getpixel((x, y)) == (0, 0, 0, 255): # Black
+            if im.getpixel((x, y)) == 0: # (0, 0, 0, 255): # Black
                 # Get the region number from north or west
                 # or create new region
                 region_n = pixel_region[x-1][y] if x > 0 else 0
