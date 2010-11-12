@@ -8,6 +8,9 @@ urlpatterns = patterns('',
     url(r'^media/(.*)$', 'django.views.static.serve',
         {'document_root': settings.MEDIA_ROOT}),
 
+    # segmentation
+    url(r'^segmentation/', include('segmentation.urls')),
+
     # base
     url(r'^', include('base.urls')),
 )

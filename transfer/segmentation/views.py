@@ -6,12 +6,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from base.forms import ImageForm
-from base.models import Image
-from base.utils import find_regions
+from segmentation.forms import ImageForm
+from segmentation.models import Image
+from segmentation.utils import find_regions
 
 
-def index(request):
+def initial(request):
     if request.POST and request.FILES:
         image_form = ImageForm(request.POST, request.FILES)
         if image_form.is_valid():
@@ -20,12 +20,37 @@ def index(request):
             return HttpResponseRedirect(reverse_url)
     else:
         image_form = ImageForm()
-    return render_to_response('index.html',
+    return render_to_response('initial.html',
                               {'image_form': image_form},
                               context_instance=RequestContext(request))
 
 
-def find_ccs(request):
+def preprocess(request, image_id):
+    return render_to_response('initial.html',
+                              {},
+                              context_instance=RequestContext(request))
+
+def filters(request, image_id):
+    return render_to_response('initial.html',
+                              {},
+                              context_instance=RequestContext(request))
+
+def tabstops(request, image_id):
+    return render_to_response('initial.html',
+                              {},
+                              context_instance=RequestContext(request))
+
+def layout(request, image_id):
+    return render_to_response('initial.html',
+                              {},
+                              context_instance=RequestContext(request))
+
+def final(request, image_id):
+    return render_to_response('initial.html',
+                              {},
+                              context_instance=RequestContext(request))
+
+def find_ccs(request, image_id):
     image_count = Image.objects.count()
     if not image_count:
         reverse_url = reverse("index")

@@ -14,13 +14,15 @@ WORKFLOW_STATUS = (
 
 class Image(models.Model):
     title = models.CharField(_(u'Title'), max_length=200)
-    image = models.ImageField(_(u'Image'), upload_to='images')
-    image_preprocessed = models.ImageField(_(u'Image'), upload_to='images',
-                                          blank=True, null=True)
-    image_mask = models.ImageField(_(u'Image mask'), upload_to='images',
-                                  blank=True, null=True)
+    image = models.ImageField(_(u'Image'), upload_to='segmentation/images')
+    preprocessed_image = models.ImageField(_(u'Preprocessed image'),
+                                           upload_to='segmentation/images',
+                                           blank=True, null=True)
+    image_mask = models.ImageField(_(u'Image mask'),
+                                   upload_to='segmentation/images',
+                                   blank=True, null=True)
     image_vertical_lines = models.ImageField(_(u'Image vertical lines'),
-                                             upload_to='images',
+                                             upload_to='segmentation/images',
                                              blank=True, null=True)
     status = models.CharField(_(u'Status'), max_length=1,
                               choices=WORKFLOW_STATUS, default='I')

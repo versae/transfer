@@ -1,0 +1,299 @@
+* {
+  margin: 0;
+  padding: 0;
+  }
+
+body {
+  font-size:100%;
+  font-family: Arial,'Lucida Grande',Verdana,sans-serif;
+  text-align:center;
+  background:#002400 url(../img/background.gif) no-repeat top center;
+}
+
+
+#page {width:992px; margin:0px auto; text-align:center;}
+
+#header {
+  height:90px;
+  width:992px;
+  background:url("../img/topbg.gif") repeat scroll 0 -100px transparent;
+  text-align:left;
+}
+
+#logo {
+  text-align:left;
+  letter-spacing:-2px;
+  text-shadow:0px 0px 8px #000;
+  font:48px Georgia, Arial, "Times New Roman", Times;
+  margin-left:18px;
+  margin-top:5px;
+  color:#FFF;
+  width:364px;
+  height:80px;
+  float: left;
+}
+
+.green {
+color:#AEF080;
+}
+
+#slogan {
+  text-align:left;
+  margin-left:100px;
+  font:14px Arial, "Times New Roman", Times;
+  letter-spacing:0px;
+  color:#FFF;
+}
+
+
+/* TOP NAVIGATION BAR */
+#nav {
+/*  width:610px;*/
+  float:right;
+  margin-top:35px;
+}
+
+#nav-menu-left {
+  background:url(../img/navbar-left.gif) no-repeat top left;
+  width:27px;
+  height:55px;
+  float: left;
+}
+#nav-menu-right {
+  background:url(../img/navbar-right.gif) no-repeat top left;
+  width:27px;
+  height:55px;
+  float: left;
+}
+#nav-menu {
+  background:url(../img/navbar-bg.gif) repeat-x top left;
+  height:55px;
+/*  width:556px;*/
+  float: left;
+}
+
+#nav-menu ul {
+  list-style:none;
+}
+  
+#nav-menu ul a {
+  background-image: url(../img/navbar-divider.gif);
+  background-repeat: no-repeat;
+  background-position: right;
+  padding-right: 12px;
+  padding-left: 12px;
+  padding-top:5px;
+  display: block;
+  line-height: 50px;
+  text-decoration: none;
+  text-shadow:1px 1px 1px #000;
+  font-family: Arial, "Times New Roman", Times, serif;
+  font-size: 18px;
+  color: #FFF;
+}
+	
+#nav-menu ul a:hover {
+  text-decoration:underline;
+  text-shadow:0px 0px 4px #FF0000;
+}
+ 
+#nav-menu li {
+  float:left;
+}
+
+#nav-menu ul a.noimage {
+    background-image: none;
+}
+/* END NAVIGATION BAR */
+
+/* Large header image of grass and flower, with slogans */
+#header2 {
+  background:url(../img/header.jpg) no-repeat top left;
+  width:992px;
+  height:224px;
+  text-shadow:1px 1px 1px #649C39;
+}
+
+#header2-slogan1 {
+  font:48px Georgia, Arial, "Times New Roman", Times;
+  padding:50px 0 0 60px;
+  color:#002400;
+  text-align:left;
+  letter-spacing:-2px;
+}
+#header2-slogan2 {
+  font:48px Georgia, Arial, "Times New Roman", Times;
+  padding:0px 0px 0px 180px;
+  color:#002400;
+  text-align:left;
+  letter-spacing:-2px;
+}
+/* end large header */
+
+/* clears all floated elements */
+.clearfloats {
+  clear:both;
+}
+/* end clear floats */
+
+/* first content section, lighter green area */
+#content {
+  background:#2E650D url(../img/body-bg.gif) no-repeat top left;
+  width:992px;
+  min-height:270px;
+  text-align:left;
+  padding-top:10px;
+  padding-bottom:20px;
+}
+
+.rounded {
+    border-radius: 35px 0 0 0;
+    -moz-border-radius: 35px 0 0 0;
+    -khtml-border-radius: 35px 0 0 0;
+    -webkit-border-radius: 35px 0 0 0;
+}
+
+.content-padding {
+  padding:0px 15px 0px 15px;
+}
+
+.content-padding a {
+  font:16px Arial, "Times New Roman", Times;
+  color:#CEFF9F;
+  text-shadow:1px 1px 1px #104D00;
+}
+
+.content-padding a:hover {
+  font:16px Arial, "Times New Roman", Times;
+  color:#FFF;
+  text-decoration:none;
+  text-shadow:0px 0px 3px #FF0000;
+}
+
+
+#content h1 {
+  font:36px Georgia, Arial, "Times New Roman", Times;
+  color:#FFF;
+  padding-bottom:10px;
+  text-shadow:1px 1px 2px #000;
+}
+
+#content p {
+  font:16px Arial, "Times New Roman", Times;
+  color:#FFF;
+  text-align:justify;
+  padding-bottom:10px;
+}
+/* end content 1 section */
+
+
+/* image that divides the two different colored content sections */
+#body-divider {
+  background:#1D5600 url(../img/body-divider.gif) no-repeat top left;
+  width:992px;
+  height:23px;
+}
+/* end content divider */
+
+/* darker green content section, "content 2" */
+#content2 {
+  width:992px;
+  min-height:250px;
+  background:#1D5600;
+  text-align:left;
+  padding-top:10px;
+  padding-bottom:30px;
+}
+
+#content2 p {
+  font:16px Arial, "Times New Roman", Times;
+  color:#FFF;
+  text-align:justify;
+  padding-bottom:10px;
+}
+
+#content2 h2,h3,h4,h5,h6 {
+  background:#1D5600 url(../img/headline-arrow.gif) no-repeat top left;
+  font:normal 25px serif, "Times New Roman", Times;
+  line-height:25px;
+  color:#FFF;
+  text-shadow:1px 1px 2px #000;
+  padding-bottom:10px;
+  padding-left:30px;
+}
+
+.content2-block {
+  width:274px;
+  float:left;
+}
+
+.content2-block p {
+  width:274px; 
+  float:left;
+  text-align:left;
+}
+
+  /* three column area, vertical dotted divider */
+  .content-divider {
+    background:url(../img/content-divider.gif) no-repeat top center;
+    width:2px;
+    height:274px;
+    float:left;
+    padding:0px 30px 0px 30px; 
+  }
+  /* end divider */
+
+/* end content 2 */
+
+
+/* subscribe form */
+#subscribe {text-align:right; padding-right:15px;}
+#subscribe input { margin:1px 0;}
+.button {
+  background:transparent url(../img/submit.gif) no-repeat top left;
+  padding-bottom:5px; 
+  border:none;
+  width:126px;
+  height:33px;
+  color:#FFFFFF;
+  font:bold 13px Arial, Georgia, "Times New Roman", Times;
+  cursor:pointer;
+}
+.inputstyle {
+  background:#002200;
+  width:200px;
+  height:30px;
+  color:#FFF;
+  font-size:14px;
+  padding:0px 5px 0px 10px;
+  border:1px solid #427B23;
+}
+/* end subscribe form */
+
+
+
+/* footer of page */
+#footer-div {
+  background:url(../img/footer-div.gif) no-repeat top left;
+  width:992px;
+  height:6px;
+}
+
+#footer {
+  padding:15px 0 15px 0;
+  width:992px;
+  height:35px;
+  background:#001800;
+  text-align:center;
+}
+
+#footer p {
+  font:12px Arial, "Times New Roman", Times;
+  color:#FFF;
+}
+
+#footer a {
+  font:12px Arial, "Times New Roman", Times;
+  color:#FFF;
+}
+/* end footer */

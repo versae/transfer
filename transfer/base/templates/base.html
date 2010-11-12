@@ -1,0 +1,84 @@
+{% load i18n %}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="{{ LANGUAGE_CODE|slice:":2" }}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:v="urn:schemas-microsoft-com:vml"
+      version="-//W3C//DTD XHTML 1.0 Strict//EN">
+<head>
+    <title>{{ PROJECT_NAME }} - {% block title %}{% endblock %}</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/base.css" />
+    <!--[if lt IE 7]>
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/iefixes.css" />
+    <![endif]-->
+    {% block extra_metas %}{% endblock %}
+    {% block extra_links %}{% endblock %}
+    {% block extra_scripts %}{% endblock %}
+</head>
+
+<body {% block body_attrs %}{% endblock %}>
+{% block body %}
+    <div id="page">
+      <div id="header">
+        <div id="logo">
+        <!-- type your logo and small slogan here -->
+        <p>Transfer<span class="green"><em>Cloud</em></span></p>
+        <div id="slogan"><p><em>{% trans "page segmentation and transcription" %}</em></p></div>
+        <!-- end logo -->
+        </div>
+        <div id="nav">
+          <div id="nav-menu-left"></div>
+          <div id="nav-menu">
+          <!-- start of navigation -->
+           {% block nav %}
+            <ul>
+              <li><a href="{% url index %}">Home</a></li>
+              <li><a href="{% url segmentation_initial %}">Upload</a></li>
+              <li><a href="#" class="noimage">Plans & pricing</a></li>
+            </ul>
+            {% endblock %}
+            <!-- end navigation -->
+          </div>
+          <div id="nav-menu-right"></div>
+        </div>
+      </div>
+    <!--      <div class="clearfloats"></div> -->
+    {% block header_slogan %}
+    {% endblock %}
+     
+      <div id="content" class="{% if not is_home %}rounded{% endif %}">
+        <div class="content-padding">
+          <!-- page content below -->
+          {% block header %}
+          <h1>Document Heading</h1>
+          {% endblock %}
+          {% block content %}
+          <p>Blah, blah.</p>
+          <p>Blah, blah.</p>
+          <p>Blah, blah.</p>
+          {% endblock %}
+        </div>
+      </div>
+      {% block prefooter %}
+      {% endblock %}
+      <div id="footer-div"></div>
+      <div id="footer">
+      {% block footer %}
+        <p>{% trans "Copyright" %} &copy; {{ CURRENT_DATE|date:"Y" }}. {{ PROJECT_NAME }} @ <a href="http:/cultureplex.ca/">Cultureplex.ca</a>. {% trans "All rights reserved" %}.
+        </p>
+        <p><a href="#">{% trans "Terms" %}</a> | <a href="#">{% trans "FAQ" %}</a> | <a href="#" >{% trans "Contact us" %}</a>
+        </p>
+        <p>{% trans "Template from" %} <a href="http://www.steves-templates.com">Steves</a>.
+        </p>
+      {% endblock %}
+      </div>
+    </div>
+{% endblock %}
+</body>
+<!--
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+<script type="text/javascript">
+    _uacct = "{{ GOOGLE_ANALYTICS_CODE }}";
+    urchinTracker();
+</script>
+-->
+</html>

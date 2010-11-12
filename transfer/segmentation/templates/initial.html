@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+{% trans "Home" %}
+{% endblock %}
+
+{% block header %}
+<h1>{% trans "Upload an image to analyze" %}</h1>
+{% endblock %}
+
+{% block content %}
+<p>
+<form action="." method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ iamge_form.errors }}
+    {{ image_form.as_p }}
+    <input type="submit" name="_save" class="default" value="{% trans "Run" %}" />
+</form>
+</p>
+{% endblock %}
