@@ -21,7 +21,7 @@ class Image(models.Model):
                                              upload_to='images',
                                              blank=True, null=True)
     status = models.CharField(_(u'Status'), max_length=1,
-                              choices=WORKFLOW_STATUS)
+                              choices=WORKFLOW_STATUS, default='I')
     small_ccs = models.TextField(_(u'Small Connected Components'),
                                  blank=True, null=True)
     medium_ccs = models.TextField(_(u'Medium Connected Components'),
