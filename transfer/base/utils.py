@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+# Taken from: http://stackoverflow.com/questions/1989987/my-own-ocr-program-in-python
 
 class Region():
 
