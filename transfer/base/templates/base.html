@@ -41,16 +41,17 @@
           <div id="nav-menu-right"></div>
         </div>
       </div>
-    <!--      <div class="clearfloats"></div> -->
     {% block header_slogan %}
     {% endblock %}
      
       <div id="content" class="{% if not is_home %}rounded{% endif %}">
-        <div class="content-padding">
+        <div class="content-padding main-title">
           <!-- page content below -->
           {% block header %}
           <h1>Document Heading</h1>
           {% endblock %}
+       </div>
+       <div class="content-padding main-content">
           {% block content %}
           <p>Blah, blah.</p>
           <p>Blah, blah.</p>

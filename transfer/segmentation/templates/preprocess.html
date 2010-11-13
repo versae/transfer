@@ -6,10 +6,17 @@
 {% endblock %}
 
 {% block header %}
-<h1>{% trans "Upload an image to analyze" %}</h1>
+<h1>{% trans "Preprocessing" %}</h1>
 {% endblock %}
 
 {% block content %}
+<p>
+{{ image_obj.title }}
+<img src="{{ image_object.image.url }}"/>
+
+{{ ccs }}
+
+</p>
 <p>
 <form action="." method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -19,3 +26,4 @@
 </form>
 </p>
 {% endblock %}
+

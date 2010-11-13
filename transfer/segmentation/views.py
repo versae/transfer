@@ -6,28 +6,30 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from segmentation.forms import ImageForm
+from segmentation.forms import InitialImageForm
 from segmentation.models import Image
 from segmentation.utils import find_regions
 
 
 def initial(request):
     if request.POST and request.FILES:
-        image_form = ImageForm(request.POST, request.FILES)
+        image_form = InitialImageForm(request.POST, request.FILES)
         if image_form.is_valid():
-            image_form.save()
-            reverse_url = reverse("find_ccs")
+            image_object = image_form.save()
+            reverse_url = reverse("segmentation_preprocess",
+                                  args=[image_object.id])
             return HttpResponseRedirect(reverse_url)
     else:
-        image_form = ImageForm()
+        image_form = InitialImageForm()
     return render_to_response('initial.html',
                               {'image_form': image_form},
                               context_instance=RequestContext(request))
 
 
 def preprocess(request, image_id):
-    return render_to_response('initial.html',
-                              {},
+    image_object = Image.objects.get(id=image_id)
+    return render_to_response('preprocess.html',
+                              {'image_object': image_object},
                               context_instance=RequestContext(request))
 
 def filters(request, image_id):

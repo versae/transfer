@@ -172,7 +172,7 @@ color:#AEF080;
 
 
 #content h1 {
-  font:36px Georgia, Arial, "Times New Roman", Times;
+  font: 30px Georgia, Arial, "Times New Roman", Times;
   color:#FFF;
   padding-bottom:10px;
   text-shadow:1px 1px 2px #000;
@@ -180,9 +180,14 @@ color:#AEF080;
 
 #content p {
   font:16px Arial, "Times New Roman", Times;
-  color:#FFF;
+  color:#002400;
   text-align:justify;
   padding-bottom:10px;
+}
+
+.main-content {
+    background-color: #fff;
+    padding: 5px 10px;
 }
 /* end content 1 section */
 
@@ -283,7 +288,7 @@ color:#AEF080;
   padding:15px 0 15px 0;
   width:992px;
   height:35px;
-  background:#001800;
+  background: #002400;
   text-align:center;
 }
 

@@ -2,6 +2,15 @@
 from django.db import models
 from django.utils.translation import gettext as _
 
+STATUS_DICT = {
+    'INITIAL': 'I',
+    'PREPROCESSED': 'P',
+    'FILTERED': 'F',
+    'TAB-STOPS': 'T',
+    'COLUM-LAYOUT': 'C',
+    'FINAL-REGIONS': 'R',
+}
+
 WORKFLOW_STATUS = (
     ('I', u'Initial'),
     ('P', u'Preprocessed'),
