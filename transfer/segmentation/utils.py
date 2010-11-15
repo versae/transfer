@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-# Taken from: http://stackoverflow.com/questions/1989987/my-own-ocr-program-in-python
+# Parts taken from: http://stackoverflow.com/questions/1989987/my-own-ocr-program-in-python
 
-class Region():
+
+class Region(object):
 
     def __init__(self, x, y):
         self._pixels = [(x, y)]
@@ -20,6 +21,16 @@ class Region():
     def box(self):
         return [(self._min_x, self._min_y), (self._max_x, self._max_y)]
 
+    def _json(self):
+        return [self._min_x, self._min_y, self._max_x - self._min_x,
+                self._max_y - self._min_y]
+
+def region_serializer(python_object):
+    if isinstance(python_object, Region):
+        return {'__class__': 'Region',
+                'box': python_object._json()}
+    raise TypeError(repr(python_object) + ' is not JSON serializable')
+
 
 def find_regions(im):
     width, height = im.size
@@ -30,7 +41,6 @@ def find_regions(im):
     # First pass. Find regions.
     for x in xrange(width):
         for y in xrange(height):
-            print im.getpixel((x, y))
             # Look for a black pixel
             if im.getpixel((x, y)) == 0: # (0, 0, 0, 255): # Black
                 # Get the region number from north or west
@@ -52,7 +62,6 @@ def find_regions(im):
                 else:
                     n_regions += 1
                     new_region = n_regions
-
                 pixel_region[x][y] = new_region
     # Scan image again, assigning all equivalent regions the same region value.
     for x in xrange(width):

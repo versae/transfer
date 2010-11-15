@@ -3,8 +3,10 @@
 
 {% block extra_scripts %}
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/pixastic.binarization.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/segmentation.preprocess.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/segmentation.filters.js"></script>
+<!--[if IE]>
+    <script src="http://explorercanvas.googlecode.com/svn/trunk/excanvas.js"></script>
+<![endif]-->
 {% endblock %}
 
 {% block title %}
@@ -12,20 +14,21 @@
 {% endblock %}
 
 {% block header %}
-<h1>{% trans "Preprocessing" %}</h1>
+<h1>{% trans "Filtered" %}</h1>
 {% endblock %}
 
 {% block content %}
 <p>
 {{ image_object.title }}
 <img src="{{ image_object.preprocessed_image.url }}" id="imageToProcess"/>
+<canvas width="{{ image_object.preprocessed_image.width }}" height="{{ image_object.preprocessed_image.height }}" id="canvasImageToProcess"/>
 </p>
 <p>
 <form action="." method="post" enctype="multipart/form-data" id="preprocessForm">
     {% csrf_token %}
     {{ iamge_form.errors }}
     {{ image_form.as_p }}
-    <input type="button" name="threshold_apply" id="id_threshold_apply" class="default" value="{% trans "Apply" %}" />
+    <input type="hidden" name="regions" id="id_regions" class="default" value="{{ regions }}" />
     <input type="submit" name="_save" class="default" value="{% trans "Next" %}" />
 </form>
 </p>

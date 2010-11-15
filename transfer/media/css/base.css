@@ -140,10 +140,10 @@ color:#AEF080;
 #content {
   background:#2E650D url(../img/body-bg.gif) no-repeat top left;
   width:992px;
-  min-height:270px;
+/*  min-height:270px;*/
   text-align:left;
   padding-top:10px;
-  padding-bottom:20px;
+/*  padding-bottom:20px;*/
 }
 
 .rounded {
@@ -188,6 +188,7 @@ color:#AEF080;
 .main-content {
     background-color: #fff;
     padding: 5px 10px;
+    min-height:270px;
 }
 /* end content 1 section */
 
