@@ -46,7 +46,8 @@ def preprocess(request, image_id):
 
 def filters(request, image_id):
     image_object = Image.objects.get(id=image_id)
-    regions = find_regions(PILImage.open(image_object.image.file.name))
+    pil_image = PILImage.open(image_object.preprocessed_image.file.name)
+    regions = find_regions(pil_image)
     json_regions = dumps(regions, default=region_serializer)
     return render_to_response('filters.html',
                               {'image_object': image_object,

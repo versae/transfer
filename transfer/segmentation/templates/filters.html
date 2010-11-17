@@ -21,9 +21,8 @@
 <p>
 {{ image_object.title }}
 <img src="{{ image_object.preprocessed_image.url }}" id="imageToProcess"/>
-<canvas width="{{ image_object.preprocessed_image.width }}" height="{{ image_object.preprocessed_image.height }}" id="canvasImageToProcess"/>
+<canvas width="{{ image_object.preprocessed_image.width }}" height="{{ image_object.preprocessed_image.height }}" id="canvasImageToProcess"></canvas>
 </p>
-<p>
 <form action="." method="post" enctype="multipart/form-data" id="preprocessForm">
     {% csrf_token %}
     {{ iamge_form.errors }}
@@ -31,6 +30,5 @@
     <input type="hidden" name="regions" id="id_regions" class="default" value="{{ regions }}" />
     <input type="submit" name="_save" class="default" value="{% trans "Next" %}" />
 </form>
-</p>
 {% endblock %}
 

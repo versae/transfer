@@ -42,7 +42,7 @@ def find_regions(im):
     for x in xrange(width):
         for y in xrange(height):
             # Look for a black pixel
-            if im.getpixel((x, y)) == 0: # (0, 0, 0, 255): # Black
+            if im.getpixel((x, y)) in (0, (0, 0, 0), (0, 0, 0, 255)):
                 # Get the region number from north or west
                 # or create new region
                 region_n = pixel_region[x-1][y] if x > 0 else 0

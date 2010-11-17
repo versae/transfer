@@ -1,6 +1,12 @@
 (function ($) {
     $(document).ready(function () {
         initialize();
+        $("#id_invert_apply").click(function () {
+            var image;
+            image = document.getElementById("imageToProcess");
+            Pixastic.process(image, "invert");
+        });
+
         $("#id_threshold_apply").click(function () {
             var image, value;
             image = document.getElementById("imageToProcess");

@@ -20,14 +20,13 @@
 {{ image_object.title }}
 <img src="{{ image_object.preprocessed_image.url }}" id="imageToProcess"/>
 </p>
-<p>
 <form action="." method="post" enctype="multipart/form-data" id="preprocessForm">
     {% csrf_token %}
     {{ iamge_form.errors }}
     {{ image_form.as_p }}
     <input type="button" name="threshold_apply" id="id_threshold_apply" class="default" value="{% trans "Apply" %}" />
+    <input type="button" name="invert_apply" id="id_invert_apply" class="default" value="{% trans "Invert" %}" />
     <input type="submit" name="_save" class="default" value="{% trans "Next" %}" />
 </form>
-</p>
 {% endblock %}
 
