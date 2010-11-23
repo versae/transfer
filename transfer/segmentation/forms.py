@@ -6,12 +6,23 @@ from PIL import Image as PILImage
 from os import path
 
 from django import forms
-from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.forms import ModelForm
 from django.utils.translation import gettext as _
 
 from segmentation.models import Image, STATUS_DICT
+
+PROCESSES_DICT = {
+    'HANDWRITTEN': 'H',
+    'ANNOTATIONS': 'A',
+    'ANCIENT': 'T',
+}
+
+PROCESSES_TYPES = (
+    (PROCESSES_DICT['HANDWRITTEN'], _(u'Handwritting')),
+    (PROCESSES_DICT['ANNOTATIONS'], _('Annotations')),
+    (PROCESSES_DICT['ANCIENT'], _('Ancient texts')),
+)
 
 
 class InitialImageForm(ModelForm):
@@ -21,6 +32,10 @@ class InitialImageForm(ModelForm):
         exclude = ("image_mask", "image_vertical_lines", "status", "small_ccs",
                    "medium_ccs", "large_ccs", "preprocessed_image",
                    "final_regions")
+
+    proccess = forms.ChoiceField(label=_(u"Apply recognition method for"),
+                                 choices=PROCESSES_TYPES,
+                                 widget=forms.RadioSelect)
 
     def save(self, *args, **kwargs):
         image = PILImage.open(self.instance.image.file)
