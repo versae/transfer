@@ -1,4 +1,14 @@
 Linux:
 ------
 
+    # PIL
     $ sudo aptitude install libjpeg libjpeg-dev
+
+    # SciPy
+    $ sudo aptitude install libamd2.2.0 libblas3gf libc6 libgcc1 libgfortran3
+    $ sudo aptitude install liblapack3gf libumfpack5.4.0 libstdc++6
+    $ sudo aptitude install build-essential gfortran libatlas-sse2-dev
+    $ sudo aptitude install python-all-dev
+
+    # matplotlib
+    $ sudo apt-get build-dep python-matplotlib

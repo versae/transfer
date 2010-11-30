@@ -2,4 +2,9 @@ Django==1.2.3
 PIL==1.1.7
 ipdb==0.2
 ipython==0.10.1
+mahotas==0.6
+matplotlib==1.0.0
+numpy==1.5.1
+pymorph==0.95
+scipy==0.8.0
 wsgiref==0.1.2
