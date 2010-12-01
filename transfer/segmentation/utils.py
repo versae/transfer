@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 # Parts taken from: http://stackoverflow.com/questions/1989987/my-own-ocr-program-in-python
+import scipy
+import mahotas
+from scipy import stats
 
 
 class Region(object):
@@ -17,6 +20,12 @@ class Region(object):
         self._max_x = max(self._max_x, x)
         self._min_y = min(self._min_y, y)
         self._max_y = max(self._max_y, y)
+
+    def height(self):
+        return abs(self._max_y - self._min_y)
+
+    def width(self):
+        return abs(self._max_x - self._min_x)
 
     def box(self):
         return [(self._min_x, self._min_y), (self._max_x, self._max_y)]
@@ -75,3 +84,32 @@ def find_regions(im):
                     else:
                         regions[r].add(x, y)
     return list(regions.itervalues())
+
+
+def filter_regions(regions):
+    small, medium, large = [], [], []
+    heights, widths, remainder = [], [], []
+    for region in regions:
+        if region.height() < 7:
+            small.append(region)
+        else:
+            remainder.append(region)
+    for region in remainder:
+        heights.append(region.height())
+        widths.append(region.width())
+    h_75 = stats.mstats.scoreatpercentile(heights, 75)
+    for region in remainder:
+        region_height = region.height()
+        if region_height < h_75 / 2:
+            small.append(region)
+        elif region_height > 2 * h_75 or region.width() > 8 * h_75:
+            large.append(region)
+        else:
+            medium.append(region)
+    return small, medium, large
+
+
+def get_otsu_threshold(im):
+    img = scipy.misc.pilutil.imread(im.file)
+    otsu_threshold = mahotas.thresholding.otsu(img)
+    return otsu_threshold
