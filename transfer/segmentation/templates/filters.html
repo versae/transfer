@@ -20,7 +20,7 @@
 {% block content %}
 <p align="center">
 {{ image_object.title }}
-<img src="{{ image_object.preprocessed_image.url }}" id="imageToProcess"/>
+<img src="{{ image_object.image.url }}" id="imageToProcess"/>
 <canvas width="{{ image_object.preprocessed_image.width }}" height="{{ image_object.preprocessed_image.height }}" id="canvasImageToProcess"></canvas>
 </p>
 <form action="." method="post" enctype="multipart/form-data" id="preprocessForm">

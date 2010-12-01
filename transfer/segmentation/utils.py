@@ -86,11 +86,11 @@ def find_regions(im):
     return list(regions.itervalues())
 
 
-def filter_regions(regions):
+def filter_regions(regions, noise_heigth=7):
     small, medium, large = [], [], []
     heights, widths, remainder = [], [], []
     for region in regions:
-        if region.height() < 7:
+        if region.height() < noise_heigth:
             small.append(region)
         else:
             remainder.append(region)

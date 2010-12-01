@@ -51,7 +51,10 @@ def filters(request, image_id):
     image_object = Image.objects.get(id=image_id)
     pil_image = PILImage.open(image_object.preprocessed_image.file.name)
     regions = find_regions(pil_image)
-    filtered_regions = filter_regions(regions)
+    # Based on paper http://research.google.com/pubs/pub35094.html
+    factor = 5.4264e-5
+    noise_heigth = factor * pil_image.size[0]
+    filtered_regions = filter_regions(regions, noise_heigth)
     json_regions = dumps(filtered_regions, default=region_serializer)
     return render_to_response('filters.html',
                               {'image_object': image_object,
