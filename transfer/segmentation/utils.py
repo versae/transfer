@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+import ImageFilter
 import mahotas
 import operator
 import scipy
 
+from numpy import mgrid, exp
 from PIL import Image
 from scipy import stats
 
@@ -45,7 +47,7 @@ def region_serializer(python_object):
 
 
 def binarize(im, threshold=None, grayscale=True, rc=False):
-    if not grayscale:
+    if grayscale:
         out = im.convert("L")
     else:
         out = im
@@ -53,7 +55,7 @@ def binarize(im, threshold=None, grayscale=True, rc=False):
         if rc:
             threshold = get_rc_threshold(out, from_image=True)
         else:
-            threshold = get_otsu_threshold(out.convert("L"), from_image=True)
+            threshold = get_otsu_threshold(out, from_image=True)
 
     def transform(pixel):
         if ((isinstance(pixel, (int, float)) and pixel < threshold)
@@ -65,6 +67,53 @@ def binarize(im, threshold=None, grayscale=True, rc=False):
 
     out = out.point(transform)
     return out
+
+
+def extract_handwritten_text(im):
+    bim = binarize(im.point(lambda x: x * 2), grayscale=False)
+    pixels = bim.load()
+    width, height = im.size
+    for x in range(width):
+        for y in range(height):
+            px = pixels[x, y]
+            if px[0] == px[1] == px[2]:
+                pixels[x, y] = (255, 255, 255)
+    pixels = bim.load()
+    bmask = binarize(bim)
+    mpixels = bmask.load()
+    for x in range(width):
+        for y in range(height):
+            if mpixels[x, y] == 0:
+                pixels[x, y] = (255, 255, 255)
+#    notes = binarize(bim.filter(GaussianFilter))
+    return bim
+
+
+# Gauss filter taken from http://rcjp.wordpress.com/2008/04/02/gaussian-pil-image-filter/
+def gaussian_grid(size = 5):
+    """
+    Create a square grid of integers of gaussian shape
+    e.g. gaussian_grid() returns
+    array([[ 1,  4,  7,  4,  1],
+           [ 4, 20, 33, 20,  4],
+           [ 7, 33, 55, 33,  7],
+           [ 4, 20, 33, 20,  4],
+           [ 1,  4,  7,  4,  1]])
+    """
+    m = size / 2
+    n = m + 1  # Remember python is 'upto' n in the range below
+    x, y = mgrid[-m:n, -m:n]
+    # Multiply by a factor to get 1 in the corner of the grid
+    # i.e., for a 5x5 grid → fac*exp(-0.5 * (2**2 + 2**2)) = 1
+    fac = exp(m**2)
+    g = fac * exp(-0.5 * (x**2 + y**2))
+    return g.round().astype(int)
+
+
+class GaussianFilter(ImageFilter.BuiltinFilter):
+    name = "Gaussian blur filter"
+    gg = gaussian_grid().flatten().tolist()
+    filterargs = (5, 5), sum(gg), 0, tuple(gg)
 
 
 # Parts taken from: http://stackoverflow.com/questions/1989987/my-own-ocr-program-in-python
