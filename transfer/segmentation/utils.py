@@ -69,8 +69,8 @@ def binarize(im, threshold=None, grayscale=True, rc=False):
     return out
 
 
-def extract_handwritten_text(im):
-    bim = binarize(im.point(lambda x: x * 2), grayscale=False)
+def extract_handwritten_text(im, factor=2):
+    bim = binarize(im.point(lambda x: x * factor), grayscale=False)
     pixels = bim.load()
     width, height = im.size
     for x in range(width):
