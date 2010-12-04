@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-# Parts taken from: http://stackoverflow.com/questions/1989987/my-own-ocr-program-in-python
-import scipy
 import mahotas
+import operator
+import scipy
+
+from PIL import Image
 from scipy import stats
 
 
@@ -34,6 +36,7 @@ class Region(object):
         return [self._min_x, self._min_y, self._max_x - self._min_x,
                 self._max_y - self._min_y]
 
+
 def region_serializer(python_object):
     if isinstance(python_object, Region):
         return {'__class__': 'Region',
@@ -41,6 +44,30 @@ def region_serializer(python_object):
     raise TypeError(repr(python_object) + ' is not JSON serializable')
 
 
+def binarize(im, threshold=None, grayscale=True, rc=False):
+    if not grayscale:
+        out = im.convert("L")
+    else:
+        out = im
+    if not threshold:
+        if rc:
+            threshold = get_rc_threshold(out, from_image=True)
+        else:
+            threshold = get_otsu_threshold(out.convert("L"), from_image=True)
+
+    def transform(pixel):
+        if ((isinstance(pixel, (int, float)) and pixel < threshold)
+            or (isinstance(pixel, (list, tuple))
+                and all(map(lambda v: v < threshold, pixel[:3])))):
+            return 0
+        else:
+            return 255
+
+    out = out.point(transform)
+    return out
+
+
+# Parts taken from: http://stackoverflow.com/questions/1989987/my-own-ocr-program-in-python
 def find_regions(im):
     width, height = im.size
     regions = {}
@@ -109,7 +136,41 @@ def filter_regions(regions, noise_heigth=7):
     return small, medium, large
 
 
-def get_otsu_threshold(im):
-    img = scipy.misc.pilutil.imread(im.file)
+def get_otsu_threshold(im, from_image=False):
+    if from_image:
+        img = scipy.misc.pilutil.fromimage(im)
+    else:
+        img = scipy.misc.pilutil.imread(im)
     otsu_threshold = mahotas.thresholding.otsu(img)
     return otsu_threshold
+
+
+def get_rc_threshold(im, from_image=False):
+    if from_image:
+        img = scipy.misc.pilutil.fromimage(im)
+    else:
+        img = scipy.misc.pilutil.imread(im)
+    otsu_threshold = mahotas.thresholding.rc(img)
+    return otsu_threshold
+
+
+def equalize(im):
+    # Taken from http://effbot.org/zone/pil-histogram-equalization.htm
+    lut = []
+    h = im.histogram()
+    for b in range(0, len(h), 256):
+        # Step size
+        step = reduce(operator.add, h[b:b + 256]) / 255
+        # Create equalization lookup table
+        n = 0
+        for i in range(256):
+            lut.append(n / step)
+            n = n + h[i + b]
+    return im.point(lut)
+
+
+def thumbnail(im, max_height=500):
+    aspect_ratio = float(im.size[0]) / float(im.size[1])
+    if im.size[0] > 500:
+        return im.resize((aspect_ratio * max_height, max_height),
+                         Image.ANTIALIAS)

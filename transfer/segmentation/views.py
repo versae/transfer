@@ -30,7 +30,7 @@ def initial(request):
 
 def preprocess(request, image_id):
     image_object = Image.objects.get(id=image_id)
-    otsu_threshold = get_otsu_threshold(image_object.image)
+    otsu_threshold = get_otsu_threshold(image_object.image.file)
     if request.POST:
         image_form = PreprocessImageForm(request.POST, instance=image_object)
         if image_form.is_valid():
