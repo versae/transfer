@@ -5,8 +5,11 @@ import operator
 import scipy
 
 from numpy import mgrid, exp
-from PIL import Image
-from scipy import stats
+from PIL import Image, ImageDraw
+from scipy import ndimage, stats
+
+# Based on paper http://research.google.com/pubs/pub35094.html
+NOISE_FACTOR = 5.4264e-5
 
 
 class Region(object):
@@ -70,27 +73,88 @@ def binarize(im, threshold=None, grayscale=True, rc=False):
 
 
 def extract_handwritten_text(im, factor=2):
-    bim = binarize(im.point(lambda x: x * factor), grayscale=False)
-    pixels = bim.load()
-    width, height = im.size
-    for x in range(width):
-        for y in range(height):
-            px = pixels[x, y]
-            if px[0] == px[1] == px[2]:
-                pixels[x, y] = (255, 255, 255)
-    pixels = bim.load()
-    bmask = binarize(bim)
-    mpixels = bmask.load()
-    for x in range(width):
-        for y in range(height):
-            if mpixels[x, y] == 0:
-                pixels[x, y] = (255, 255, 255)
-#    notes = binarize(bim.filter(GaussianFilter))
+
+    def _extract_handwritten_text(im, factor):
+        factor = factor * 1.0
+        bim = binarize(im.point(lambda x: x * factor), grayscale=False)
+        pixels = bim.load()
+        width, height = im.size
+        for x in range(width):
+            for y in range(height):
+                px = pixels[x, y]
+                if px[0] == px[1] == px[2]:
+                    pixels[x, y] = (255, 255, 255)
+        pixels = bim.load()
+        bmask = binarize(bim)
+        mpixels = bmask.load()
+        for x in range(width):
+            for y in range(height):
+                if mpixels[x, y] == 0:
+                    pixels[x, y] = (255, 255, 255)
+        notes = binarize(bim, rc=True)
+        return notes
+
+    if isinstance(factor, (list, tuple)):
+        bim = _extract_handwritten_text(im, factor=factor[0])
+        w, h = bim.size
+        for f in factor[1:]:
+            fim = _extract_handwritten_text(im, factor=f)
+            bpixels = bim.load()
+            fpixels = fim.load()
+            for x in range(w):
+                for y in range(h):
+                    if fpixels[x, y] == 0:
+                        bpixels[x, y] = 0
+    else:
+        bim = _extract_handwritten_text(im, factor=factor)
     return bim
 
 
+def remove_noise(im, size=5):
+    out = im.convert("L")
+    out = gaussian_filter(out, size=size)
+    pixels = out.load()
+    width, height = out.size
+    for x in range(width):
+        for y in range(height):
+            px = pixels[x, y]
+            if px != 0:
+                pixels[x, y] = 255
+    return out
+
+
+def draw_regions(original_image, mask_image):
+    height = original_image.size[1]
+    regions = find_regions(mask_image)
+    filtered_regions = filter_regions(regions,
+                                      noise_heigth=NOISE_FACTOR * height)
+    draw = ImageDraw.Draw(original_image)
+    for r in filtered_regions[2]:
+        draw.rectangle(r.box(), outline="red")
+    del draw
+    draw = ImageDraw.Draw(original_image)
+    for r in filtered_regions[1]:
+        draw.rectangle(r.box(), outline="red")
+    del draw
+#    draw = ImageDraw.Draw(original_image)
+#    for r in filtered_regions[0]:
+#        draw.rectangle(r.box(), outline="red")
+#    del draw
+    return original_image
+
+
+def proccess_image(im, factor=0.5):
+    bim = extract_handwritten_text(im, factor=factor)
+    bbim = binarize(bim.convert("1").convert("RGB").filter(GaussianFilter()))
+    return draw_regions(im, bbim)
+
+
+def gaussian_filter(im, size=5):
+    return np2pil(ndimage.gaussian_filter(pil2np(im), size))
+
+
 # Gauss filter taken from http://rcjp.wordpress.com/2008/04/02/gaussian-pil-image-filter/
-def gaussian_grid(size = 5):
+def gaussian_grid(size=5):
     """
     Create a square grid of integers of gaussian shape
     e.g. gaussian_grid() returns
@@ -101,19 +165,21 @@ def gaussian_grid(size = 5):
            [ 1,  4,  7,  4,  1]])
     """
     m = size / 2
-    n = m + 1  # Remember python is 'upto' n in the range below
+    n = m + 1 # Remember python is 'upto' n in the range below
     x, y = mgrid[-m:n, -m:n]
     # Multiply by a factor to get 1 in the corner of the grid
-    # i.e., for a 5x5 grid → fac*exp(-0.5 * (2**2 + 2**2)) = 1
-    fac = exp(m**2)
-    g = fac * exp(-0.5 * (x**2 + y**2))
+    # i.e., for a 5x5 grid -> fac * exp(-0.5 * (2**2 + 2**2)) = 1
+    fac = exp(m ** 2)
+    g = fac * exp(-0.5 * (x ** 2 + y ** 2))
     return g.round().astype(int)
 
 
 class GaussianFilter(ImageFilter.BuiltinFilter):
-    name = "Gaussian blur filter"
-    gg = gaussian_grid().flatten().tolist()
-    filterargs = (5, 5), sum(gg), 0, tuple(gg)
+
+    def __init__(self, size=5, *args, **kwargs):
+        self.name = "Gaussian blur filter"
+        gg = gaussian_grid(size).flatten().tolist()
+        self.filterargs = (size, size), sum(gg), 0, tuple(gg)
 
 
 # Parts taken from: http://stackoverflow.com/questions/1989987/my-own-ocr-program-in-python
@@ -223,3 +289,11 @@ def thumbnail(im, max_height=500):
     if im.size[0] > 500:
         return im.resize((aspect_ratio * max_height, max_height),
                          Image.ANTIALIAS)
+
+
+def pil2np(im):
+    return scipy.misc.pilutil.fromimage(im)
+
+
+def np2pil(im):
+    return scipy.misc.pilutil.toimage(im)

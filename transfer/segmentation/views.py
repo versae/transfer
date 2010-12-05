@@ -53,7 +53,7 @@ def filters(request, image_id):
     regions = find_regions(pil_image)
     # Based on paper http://research.google.com/pubs/pub35094.html
     factor = 5.4264e-5
-    noise_heigth = factor * pil_image.size[0]
+    noise_heigth = factor * pil_image.size[1]
     filtered_regions = filter_regions(regions, noise_heigth)
     json_regions = dumps(filtered_regions, default=region_serializer)
     return render_to_response('filters.html',
