@@ -16,4 +16,6 @@ urlpatterns = patterns('segmentation.views',
         name="segmentation_layout"),
     url(r'^final/(?P<image_id>\d+)/$', 'final',
         name="segmentation_final"),
+    url(r'^handwritten/(?P<image_id>\d+)/$', 'handwritten',
+        name="segmentation_handwritten"),
 )

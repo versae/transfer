@@ -33,6 +33,9 @@ class Image(models.Model):
     image_vertical_lines = models.ImageField(_(u'Image vertical lines'),
                                              upload_to='segmentation/images',
                                              blank=True, null=True)
+    handritten_mask = models.ImageField(_(u'Handwritting mask'),
+                                        upload_to='segmentation/images',
+                                        blank=True, null=True)
     status = models.CharField(_(u'Status'), max_length=1,
                               choices=WORKFLOW_STATUS, default='I')
     small_ccs = models.TextField(_(u'Small Connected Components'),

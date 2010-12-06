@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block extra_scripts %}
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/segmentation.handwritten.js"></script>
+<!--[if IE]>
+    <script src="http://explorercanvas.googlecode.com/svn/trunk/excanvas.js"></script>
+<![endif]-->
+{% endblock %}
+
+{% block title %}
+{% trans "Handwritting" %}
+{% endblock %}
+
+{% block header %}
+<h1>{% trans "Handwritting" %}</h1>
+{% endblock %}
+
+{% block content %}
+<p align="center">
+{{ image_object.title }}
+<img src="{{ image_object.handritten_mask.url }}" id="imageToProcess"/>
+<canvas width="{{ image_object.handritten_mask.width }}" height="{{ image_object.handritten_mask.height }}" id="canvasImageToProcess"></canvas>
+</p>
+{% endblock %}
+

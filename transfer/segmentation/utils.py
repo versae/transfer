@@ -60,7 +60,7 @@ def binarize(im, threshold=None, grayscale=True, rc=False):
         else:
             threshold = get_otsu_threshold(out, from_image=True)
 
-    def transform(pixel):
+    def _transform(pixel):
         if ((isinstance(pixel, (int, float)) and pixel < threshold)
             or (isinstance(pixel, (list, tuple))
                 and all(map(lambda v: v < threshold, pixel[:3])))):
@@ -68,7 +68,7 @@ def binarize(im, threshold=None, grayscale=True, rc=False):
         else:
             return 255
 
-    out = out.point(transform)
+    out = out.point(_transform)
     return out
 
 
@@ -110,16 +110,22 @@ def extract_handwritten_text(im, factor=2):
     return bim
 
 
-def remove_noise(im, size=5):
+def remove_noise(im, size=2):
     out = im.convert("L")
     out = gaussian_filter(out, size=size)
-    pixels = out.load()
+    out = binarize(out, rc=True)
+    return out
+
+
+def draw_overlay(original_image, mask_image, color=(255, 0, 0)):
+    out = original_image.convert("RGB")
     width, height = out.size
+    opixels = out.load()
+    mpixels = mask_image.load()
     for x in range(width):
         for y in range(height):
-            px = pixels[x, y]
-            if px != 0:
-                pixels[x, y] = 255
+            if not mpixels[x, y]:
+                opixels[x, y] = color
     return out
 
 
@@ -134,19 +140,19 @@ def draw_regions(original_image, mask_image):
     del draw
     draw = ImageDraw.Draw(original_image)
     for r in filtered_regions[1]:
-        draw.rectangle(r.box(), outline="red")
+        draw.rectangle(r.box(), outline="green")
     del draw
-#    draw = ImageDraw.Draw(original_image)
-#    for r in filtered_regions[0]:
-#        draw.rectangle(r.box(), outline="red")
-#    del draw
+    draw = ImageDraw.Draw(original_image)
+    for r in filtered_regions[0]:
+        draw.rectangle(r.box(), outline="blue")
+    del draw
     return original_image
 
 
-def proccess_image(im, factor=0.5):
+def process_image(im, factor=[2, 0.25]):
     bim = extract_handwritten_text(im, factor=factor)
-    bbim = binarize(bim.convert("1").convert("RGB").filter(GaussianFilter()))
-    return draw_regions(im, bbim)
+    nim = remove_noise(bim).convert("1")
+    return draw_overlay(im, nim)
 
 
 def gaussian_filter(im, size=5):

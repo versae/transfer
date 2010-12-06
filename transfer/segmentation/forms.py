@@ -11,6 +11,7 @@ from django.forms import ModelForm
 from django.utils.translation import gettext as _
 
 from segmentation.models import Image, STATUS_DICT
+from segmentation.utils import extract_handwritten_text, remove_noise
 
 PROCESSES_DICT = {
     'HANDWRITTEN': 'H',
@@ -31,11 +32,11 @@ class InitialImageForm(ModelForm):
         model = Image
         exclude = ("image_mask", "image_vertical_lines", "status", "small_ccs",
                    "medium_ccs", "large_ccs", "preprocessed_image",
-                   "final_regions")
+                   "final_regions", "handritten_mask")
 
-    proccess = forms.ChoiceField(label=_(u"Apply recognition method for"),
-                                 choices=PROCESSES_TYPES,
-                                 widget=forms.RadioSelect)
+    process = forms.ChoiceField(label=_(u"Apply recognition method for"),
+                                choices=PROCESSES_TYPES,
+                                widget=forms.RadioSelect)
 
     def save(self, *args, **kwargs):
         image = PILImage.open(self.instance.image.file)
@@ -48,8 +49,23 @@ class InitialImageForm(ModelForm):
         name = suf.name
         if "." in name:
             name = name.split(".")[0]
-        self.instance.preprocessed_image.save("%s_L.png" % suf.name, suf,
+        self.instance.preprocessed_image.save("%s_l.png" % name, suf,
                                               save=False)
+        if self.cleaned_data["process"] == PROCESSES_DICT["HANDWRITTEN"]:
+            factor = [2, 0.25]
+            temp_handle = StringIO()
+            raw_mask = extract_handwritten_text(image, factor=factor)
+            handwritten_mask = remove_noise(raw_mask).convert("1")
+            handwritten_mask.save(temp_handle, 'png')
+            temp_handle.seek(0)
+            suf = SimpleUploadedFile(path.split(self.instance.image.name)[-1],
+                                     temp_handle.read(),
+                                     content_type='image/png')
+            name = suf.name
+            if "." in name:
+                name = name.split(".")[0]
+            self.instance.handritten_mask.save("%s_h.png" % name, suf,
+                                               save=False)
         return super(InitialImageForm, self).save(*args, **kwargs)
 
 
@@ -59,7 +75,8 @@ class PreprocessImageForm(ModelForm):
         model = Image
         exclude = ("image_mask", "image_vertical_lines", "status", "small_ccs",
                    "medium_ccs", "large_ccs", "preprocessed_image",
-                   "final_regions", "image", "notes", "title")
+                   "final_regions", "image", "notes", "title",
+                   "handritten_mask")
 
     threshold = forms.IntegerField(_(u"Binarization threshold"))
     base64_image = forms.CharField(_(u"Base64 encoded image"),

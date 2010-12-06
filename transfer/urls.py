@@ -1,7 +1,10 @@
-
+# -*- coding: utf-8 -*-
 from django.conf import settings
 from django.conf.urls.defaults import *
+from django.contrib import admin
 
+
+admin.autodiscover()
 
 urlpatterns = patterns('',
     # static server
@@ -13,4 +16,7 @@ urlpatterns = patterns('',
 
     # base
     url(r'^', include('base.urls')),
+
+    # admin_media
+    (r'^admin/', include(admin.site.urls)),
 )

@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-from PIL import Image as PILImage, ImageDraw as PILImageDraw
+from PIL import Image as PILImage
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.simplejson import dumps
 
-from segmentation.forms import InitialImageForm, PreprocessImageForm
+from segmentation.forms import (PROCESSES_DICT, InitialImageForm,
+                                PreprocessImageForm)
 from segmentation.models import Image
 from segmentation.utils import (find_regions, filter_regions,
                                 get_otsu_threshold, region_serializer)
@@ -18,8 +19,13 @@ def initial(request):
         image_form = InitialImageForm(request.POST, request.FILES)
         if image_form.is_valid():
             image_object = image_form.save()
-            reverse_url = reverse("segmentation_preprocess",
-                                  args=[image_object.id])
+            process = request.POST.get("process", PROCESSES_DICT["ANCIENT"])
+            if process == PROCESSES_DICT["HANDWRITTEN"]:
+                reverse_url = reverse("segmentation_handwritten",
+                                      args=[image_object.id])
+            else:
+                reverse_url = reverse("segmentation_preprocess",
+                                      args=[image_object.id])
             return HttpResponseRedirect(reverse_url)
     else:
         image_form = InitialImageForm()
@@ -67,31 +73,21 @@ def tabstops(request, image_id):
                               {},
                               context_instance=RequestContext(request))
 
+
 def layout(request, image_id):
     return render_to_response('initial.html',
                               {},
                               context_instance=RequestContext(request))
+
 
 def final(request, image_id):
     return render_to_response('initial.html',
                               {},
                               context_instance=RequestContext(request))
 
-def find_ccs(request, image_id):
-    image_count = Image.objects.count()
-    if not image_count:
-        reverse_url = reverse("index")
-        return HttpResponseRedirect(reverse_url)
-    last_image = Image.objects.all()[image_count - 1]
-    ccs = find_regions(PILImage.open(last_image.image.file.name))
-#    draw = ImageDraw.Draw(im)
-#    for r in regions:
-#        draw.rectangle(r.box(), outline=(255, 0, 0))
-#    del draw 
-#    output = file("output.png", "wb")
-#    im.save(output)
-#    output.close()
-    return render_to_response('ccs.html',
-                              {'image': last_image,
-                               'ccs': ccs},
+
+def handwritten(request, image_id):
+    image_object = Image.objects.get(id=image_id)
+    return render_to_response('handwritten.html',
+                              {'image_object': image_object},
                               context_instance=RequestContext(request))
