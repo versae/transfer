@@ -20,7 +20,8 @@
 {% block content %}
 <p align="center">
 {{ image_object.title }}
-<img src="{{ image_object.handritten_mask.url }}" id="imageToProcess"/>
+<img src="{{ image_object.image.url }}" id="originalImage" class="hidden"/>
+<img src="{{ image_object.handritten_mask.url }}" id="maskImage" class="hidden"/>
 <canvas width="{{ image_object.handritten_mask.width }}" height="{{ image_object.handritten_mask.height }}" id="canvasImageToProcess"></canvas>
 </p>
 {% endblock %}

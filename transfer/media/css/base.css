@@ -37,6 +37,10 @@ body {
 color:#AEF080;
 }
 
+.hidden {
+    display: none;
+}
+
 #slogan {
   text-align:left;
   margin-left:100px;

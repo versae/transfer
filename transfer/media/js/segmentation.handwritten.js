@@ -4,11 +4,15 @@
     });
 
     initialize = function () {
-        var jsonRegions, region, imgImage, canvas, context, color;
+        var canvas, context, imgOriginal, imgMask;
         canvas = document.getElementById("canvasImageToProcess");
         context = canvas.getContext("2d");
-        imgImage = document.getElementById("imageToProcess");
-        context.drawImage(imgImage, 0, 0);
+        imgOriginal = document.getElementById("originalImage");
+        imgMask = document.getElementById("maskImage");
+        context.scale(0.25, 0.25);
+        context.drawImage(imgOriginal, 0, 0);
+        context.globalCompositeOperation = 'darker';
+        context.drawImage(imgMask, 0, 0);
     }
 
 })(jQuery.noConflict());
