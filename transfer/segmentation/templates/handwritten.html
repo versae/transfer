@@ -1,8 +1,13 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block extra_links %}
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/themes/base/jquery-ui.css" type="text/css" media="all" /> 
+{% endblock %}
 {% block extra_scripts %}
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/segmentation.handwritten.js"></script>
 <!--[if IE]>
     <script src="http://explorercanvas.googlecode.com/svn/trunk/excanvas.js"></script>
@@ -18,11 +23,19 @@
 {% endblock %}
 
 {% block content %}
-<p align="center">
 {{ image_object.title }}
-<img src="{{ image_object.image.url }}" id="originalImage" class="hidden"/>
-<img src="{{ image_object.handritten_mask.url }}" id="maskImage" class="hidden"/>
-<canvas width="{{ image_object.handritten_mask.width }}" height="{{ image_object.handritten_mask.height }}" id="canvasImageToProcess"></canvas>
-</p>
+<div id="zoomPortal" >
+    <div class="outline"></div>
+    <div class="mouse"></div>
+</div>
+<img src="{{ image_object.image.url }}" id="originalImage" class="hidden" />
+<img src="{{ image_object.handritten_mask.url }}" id="maskImage" class="hidden" />
+
+<div id="imageViewer"> 
+    <div>
+    <canvas width="{{ image_object.image.width }}" height="{{ image_object.image.height }}" id="canvasImageToProcess" tabindex="2"></canvas>
+    </div>
+</div> 
+<div id="scale"></div>
 {% endblock %}
 

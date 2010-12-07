@@ -307,3 +307,57 @@ color:#AEF080;
   color:#FFF;
 }
 /* end footer */
+
+
+/* handwritten */
+
+#imageViewer {
+    width: 800px;
+    height: 600px;
+    position: relative;
+    border: 2px solid rgb(221, 221, 221);
+    overflow: hidden;
+}
+
+#imageViewer div {
+    position: absolute;
+    top: 0pt;
+    left: 0pt;
+    width: 800px;
+    height: 600px;
+    display: block;
+    z-index: 1;
+    -moz-transform: scale(1);
+    -moz-transform-origin: 50% 50%;
+}
+
+#zoomPortal {
+    position: relative;
+    width: 80px;
+    height: 60px;
+    background: left top no-repeat;
+    overflow: hidden;
+    border: 2px solid #ddd;
+    margin-top: 10px;
+    float: right;
+}
+
+#zoomPortal .outline {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 800px;
+    height: 600px;
+    outline: 1px solid blue;
+}
+
+#zoomPortal .mouse {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background-color: blue;
+}
+
+/* end handwritten */
