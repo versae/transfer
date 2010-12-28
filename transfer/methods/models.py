@@ -56,21 +56,27 @@ class Method(models.Model):
 
 
 class Step(models.Model):
+    order = models.PositiveIntegerField(_(u'Order'))
+    inputs = models.CommaSeparatedIntegerField(_(u'Inputs'), blank=True,
+                                               null=True, max_length=10,
+                                               default="0")
     function = models.ForeignKey(Function, verbose_name=_(u'function'))
     method = models.ForeignKey(Method, verbose_name=_(u'method'))
     values = models.TextField((u'Values'), blank=True, null=True)
-    order = models.PositiveIntegerField(_(u'Order'))
-    input = models.PositiveIntegerField(_(u'Input'), blank=True, null=True,
-                                        default=0)
 
     def __unicode__(self):
-        if self.input == 0:
-            input_var = u"INPUT_IMAGE"
-        else:
-            input_var = u"#%s" % (self.input)
+        inputs = self.inputs.split(",")
+        inputs_vars = []
+        for input in inputs:
+            if not int(input) or int(input) >= self.order:
+                inputs_vars.append(u"INPUT")
+            else:
+                inputs_vars.append(u"#%s" % (input))
+        print inputs_vars
+        inputs_str = ",".join(inputs_vars)
         if self.values:
-            input_var = u"%s, " % (input_var)
-        return u"#%s ← %s(%s%s)" % (self.order, self.function.name, input_var,
+            inputs_str = u"%s, " % (inputs_str)
+        return u"#%s ← %s(%s%s)" % (self.order, self.function.name, inputs_str,
                                     self.values)
 
     def exec_function(self, image):

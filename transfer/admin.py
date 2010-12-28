@@ -6,10 +6,10 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.sites.models import Site
 
 from methods.admin import FunctionAdmin, MethodAdmin, StepAdmin
-from methods.model import Function, Method, Step
+from methods.models import Function, Method, Step
 
 from segmentation.admin import ImageAdmin
-from segmentation.modes import Image
+from segmentation.models import Image
 
 
 class AdminSite(admin.AdminSite):

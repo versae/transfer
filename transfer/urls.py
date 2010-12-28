@@ -3,8 +3,8 @@ from django.conf import settings
 from django.conf.urls.defaults import *
 from django.contrib import admin
 
+from admin import admin_site
 
-admin.autodiscover()
 
 urlpatterns = patterns('',
     # static server
@@ -24,5 +24,5 @@ urlpatterns = patterns('',
     url(r'^', include('sorl.thumbnail.urls')),
 
     # admin_media
-    (r'^admin/', include(admin.site.urls)),
+    (r'^admin/', include(admin_site.urls)),
 )
