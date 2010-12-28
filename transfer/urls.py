@@ -14,8 +14,14 @@ urlpatterns = patterns('',
     # segmentation
     url(r'^segmentation/', include('segmentation.urls')),
 
+    # methods
+    url(r'^methods/', include('methods.urls')),
+
     # base
     url(r'^', include('base.urls')),
+
+    # sorl.thumbnail
+    url(r'^', include('sorl.thumbnail.urls')),
 
     # admin_media
     (r'^admin/', include(admin.site.urls)),

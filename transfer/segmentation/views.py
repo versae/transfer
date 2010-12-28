@@ -23,6 +23,9 @@ def initial(request):
             if process == PROCESSES_DICT["HANDWRITTEN"]:
                 reverse_url = reverse("segmentation_handwritten",
                                       args=[image_object.id])
+            elif process == PROCESSES_DICT["CUSTOM"]:
+                reverse_url = reverse("methods_apply",
+                                      args=[image_object.id])
             else:
                 reverse_url = reverse("segmentation_preprocess",
                                       args=[image_object.id])

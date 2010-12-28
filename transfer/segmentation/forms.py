@@ -15,15 +15,17 @@ from segmentation.utils import (draw_regions, extract_handwritten_text,
                                 remove_noise)
 
 PROCESSES_DICT = {
+    'CUSTOM': 'C',
     'HANDWRITTEN': 'H',
     'ANNOTATIONS': 'A',
     'ANCIENT': 'T',
 }
 
 PROCESSES_TYPES = (
-    (PROCESSES_DICT['HANDWRITTEN'], _(u'Handwritting')),
-    (PROCESSES_DICT['ANNOTATIONS'], _('Annotations')),
-    (PROCESSES_DICT['ANCIENT'], _('Ancient texts')),
+    (PROCESSES_DICT['CUSTOM'], _('Custom')),
+    (PROCESSES_DICT['HANDWRITTEN'], _(u'Handwritting (Not yet implemented)')),
+    (PROCESSES_DICT['ANNOTATIONS'], _('Annotations (Not yet implemented)')),
+    (PROCESSES_DICT['ANCIENT'], _('Ancient texts (Not yet implemented)')),
 )
 
 

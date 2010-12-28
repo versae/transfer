@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block extra_scripts %}
+{% endblock %}
+
+{% block title %}
+{% trans "Methods" %}
+{% endblock %}
+
+{% block header %}
+<h1>{% trans "Compose" %}</h1>
+{% endblock %}
+
+{% block content %}
+{{ step_formset }}
+{% endblock %}
+

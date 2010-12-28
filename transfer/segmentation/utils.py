@@ -132,7 +132,7 @@ def remove_foreground(im, foreground_colour=(0, 0, 0),
     filtered_image = im.filter(ImageFilter.ModeFilter)
     grayscale_binarization = binarize(filtered_image, grayscale=False)
     binarization = binarize(grayscale_binarization, threshold=255)
-    grayscale_binarization.show()
+#    grayscale_binarization.show()
     # pil2np transpose the matrix in some cases
     gim = pil2np(grayscale_binarization)
     bim = pil2np(binarization)
@@ -153,7 +153,7 @@ def remove_foreground(im, foreground_colour=(0, 0, 0),
                            inverse=True)
             else:
                 gim = fill(gim, p1, p2, foreground_colour, median_colour)
-        np2pil(gim).show()
+#        np2pil(gim).show()
     return np2pil(gim)
 
 

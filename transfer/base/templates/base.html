@@ -1,4 +1,4 @@
-{% load i18n %}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+{% load i18n thumbnail %}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="{{ LANGUAGE_CODE|slice:":2" }}"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:v="urn:schemas-microsoft-com:vml"
@@ -12,7 +12,10 @@
     <![endif]-->
     {% block extra_metas %}{% endblock %}
     {% block extra_links %}{% endblock %}
-    {% block extra_scripts %}{% endblock %}
+    {% block extra_scripts %}
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.carousel.min.js" ></script>
+    {% endblock %}
 </head>
 
 <body {% block body_attrs %}{% endblock %}>
@@ -32,6 +35,7 @@
            {% block nav %}
             <ul>
               <li><a href="{% url index %}">Home</a></li>
+              <li><a href="{% url methods_create %}">Composer</a></li>
               <li><a href="{% url segmentation_initial %}">Upload</a></li>
               <li><a href="#" class="noimage">Plans & pricing</a></li>
             </ul>
@@ -59,7 +63,31 @@
           <p>The segmentation feature provides a very fast way to discriminate the important blocks in each image to identify parts in the book pages such as titles, subtitles, capital letters, body texts, pictures and marginal annotations.</p>
           <p></p>
           <p>In the last stage, using our HMM-based neural networks, we provide final transcription of the texts analyzed while training the system to improve future recognition.</p>
-          {% endblock %}
+          <div class="carousel" align="center">
+            <ul>
+            {% for image in images %}
+                {% thumbnail image.image "500x500" as im %}
+                <li>
+                    <a href="{% url methods_apply image.id %}">
+                        Image: {{ image.title }}<br/>
+                        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                    </a>
+                </li>
+                {% empty %}
+                <li>No image</li>
+                {% endthumbnail %}
+            {% endfor %}
+            </ul>
+          </div>
+          <script type="text/javascript">
+              (function($) {
+                  $("div.carousel").carousel({
+                    pagination: true,
+                    effect: "fade"
+                  });
+              })(jQuery);
+          </script>
+        {% endblock %}
         </div>
       </div>
       {% block prefooter %}
