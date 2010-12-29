@@ -24,6 +24,7 @@ WORKFLOW_STATUS = (
 class Image(models.Model):
     title = models.CharField(_(u'Title'), max_length=200)
     image = models.ImageField(_(u'Image'), upload_to='segmentation/images')
+    final = models.ImageField(_(u'Image'), upload_to='segmentation/images')
     preprocessed_image = models.ImageField(_(u'Preprocessed image'),
                                            upload_to='segmentation/images',
                                            blank=True, null=True)

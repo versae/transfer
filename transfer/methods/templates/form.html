@@ -1,3 +1,6 @@
 {% load i18n thumbnail %}
 
-{{ method_form }}
+{{ step_formset.management_form }}
+{% for form in step_formset.forms %}
+{{ form.as_p }}
+{% endfor %}

@@ -2,6 +2,7 @@
 {% load i18n thumbnail %}
 
 {% block extra_scripts %}
+{{ select_method_form.media }}
 {% endblock %}
 
 {% block title %}
@@ -9,18 +10,23 @@
 {% endblock %}
 
 {% block header %}
-<h1>{% trans "Apply" %}</h1>
+<h1>{% trans "Apply on image" %}: {{ image_object.title }}</h1>
 {% endblock %}
 
 {% block content %}
-{{ image_object.title }}: {{ image_object.description }}
 {% thumbnail image_object.image "500x500" as im %}
 <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+<form method="post" action="{% url methods_apply image_object.id %}">
+{% csrf_token %}
+{{ select_method_form.as_p }}
+<input type="button" value="{% trans "Preview" %}" id="id_preview" class="hidden button" />
+<input type="button" value="{% trans "Custom" %}" id="id_custom" class="hidden button" />
+<input type="submit" value="{% trans "Run" %}" id="id_run" class="hidden button" />
+<fieldset id="id_fieldset" class="hidden">
+</fieldset>
+</form>
 {% empty %}
 <em>No image</em>
 {% endthumbnail %}
-
-{{ select_method_form.as_p }}
-
 {% endblock %}
 

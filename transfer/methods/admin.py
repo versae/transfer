@@ -16,7 +16,7 @@ class StepAdmin(admin.ModelAdmin):
 
 class FunctionAdmin(admin.ModelAdmin):
 
-    inlines = (StepInline, )
+    pass
 
 
 class MethodAdmin(admin.ModelAdmin):

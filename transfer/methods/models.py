@@ -48,12 +48,6 @@ class Method(models.Model):
     def __unicode__(self):
         return u"%s" % (self.name)
 
-    def apply_method(self, image):
-        out = image
-#        for step in self.steps.steps.order_by('order'):
-#            out = step.exec_function(out)
-        return out
-
 
 class Step(models.Model):
     order = models.PositiveIntegerField(_(u'Order'))
@@ -72,17 +66,16 @@ class Step(models.Model):
                 inputs_vars.append(u"INPUT")
             else:
                 inputs_vars.append(u"#%s" % (input))
-        print inputs_vars
-        inputs_str = ",".join(inputs_vars)
+        inputs_str = ", ".join(inputs_vars)
         if self.values:
             inputs_str = u"%s, " % (inputs_str)
         return u"#%s ← %s(%s%s)" % (self.order, self.function.name, inputs_str,
                                     self.values)
 
-    def exec_function(self, image):
+    def exec_function(self, inputs, values=None):
         func = self.function.import_function()
-        vals = self._get_vals_dict()
-        return func(image, **vals)
+        vals = self._get_vals_dict(values)
+        return func(*inputs, **vals)
 
-    def _get_vals_dict(self):
-        return loads(self.values)
+    def _get_vals_dict(self, values=None):
+        return eval("(lambda **kw: kw)(%s)" % (values or self.values))

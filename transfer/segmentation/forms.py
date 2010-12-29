@@ -35,7 +35,7 @@ class InitialImageForm(ModelForm):
         model = Image
         exclude = ("image_mask", "image_vertical_lines", "status", "small_ccs",
                    "medium_ccs", "large_ccs", "preprocessed_image",
-                   "final_regions", "handritten_mask")
+                   "final_regions", "handritten_mask", "final")
 
     process = forms.ChoiceField(label=_(u"Apply recognition method for"),
                                 choices=PROCESSES_TYPES,
