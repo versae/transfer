@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n thumbnail %}
 
 {% block extra_scripts %}
 {% endblock %}
@@ -13,6 +13,14 @@
 {% endblock %}
 
 {% block content %}
-{{ image_object }}
+{{ image_object.title }}: {{ image_object.description }}
+{% thumbnail image_object.image "500x500" as im %}
+<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+{% empty %}
+<em>No image</em>
+{% endthumbnail %}
+
+{{ select_method_form.as_p }}
+
 {% endblock %}
 

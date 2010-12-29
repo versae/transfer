@@ -13,6 +13,12 @@ class FunctionForm(ModelForm):
         model = Function
 
 
+class MethodForm(ModelForm):
+
+    class Meta:
+        model = Method
+
+
 class StepForm(ModelForm):
 
     class Meta:
@@ -21,9 +27,6 @@ class StepForm(ModelForm):
 StepFormSet = inlineformset_factory(Function, Step)
 
 
-#class MethodForm(ModelForm):
+class SelectMethodForm(forms.Form):
 
-#    class Meta:
-#        model = Method
-
-#MethodFormSet = inlineformset_factory(Method, Step)
+    method = forms.ModelChoiceField(queryset=Method.objects.all())
