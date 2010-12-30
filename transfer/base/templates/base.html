@@ -51,6 +51,11 @@
       <div id="content" class="{% if not is_home %}rounded{% endif %}">
         <div class="content-padding main-title">
           <!-- page content below -->
+          <div class="actions">
+          {% block actions %}
+          Option 1 | Option 2
+          {% endblock %}
+          </div>
           {% block header %}
           <h1>Document Heading</h1>
           {% endblock %}

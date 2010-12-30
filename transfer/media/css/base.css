@@ -182,6 +182,15 @@ color:#AEF080;
   text-shadow:1px 1px 2px #000;
 }
 
+#content .actions {
+  font: 20px Arial, "Times New Roman", Times;
+  color:#FFF;
+  text-shadow:1px 1px 2px #000;
+  float: right;
+  position: relative;
+  top: 5px;
+}
+
 #content p {
   font:16px Arial, "Times New Roman", Times;
   color:#002400;

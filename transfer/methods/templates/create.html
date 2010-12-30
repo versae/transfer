@@ -16,6 +16,12 @@
 <h1>{% trans "Compose" %}</h1>
 {% endblock %}
 
+{% block actions %}
+<a href="{% url methods_list "function" %}">{% trans "Functions" %}</a> |
+<a href="{% url methods_list "method" %}">{% trans "Methods" %}</a> |
+<a href="{% url methods_list "help" %}">{% trans "Help" %}</a>
+{% endblock %}
+
 {% block content %}
 <form id="id_method_form" action="." method="post">
 {% csrf_token %}
