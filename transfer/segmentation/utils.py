@@ -684,6 +684,10 @@ def thumbnail(im, max_heigth=500):
                          Image.ANTIALIAS)
 
 
+def convert(im, mode="RGB"):
+    return im.convert(mode)
+
+
 def pil2np(im):
     if im.mode == '1':
         return scipy.array(scipy.asarray(im.convert("L")))

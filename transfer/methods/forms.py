@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+from PIL import Image as PILImage
+
 from django import forms
 from django.forms import ModelForm
-from django.forms.models import modelformset_factory
+from django.forms.models import BaseModelFormSet, modelformset_factory
 from django.utils.translation import gettext as _
 
 from methods.models import Function, Method, Step
+
+from segmentation.utils import thumbnail
 
 
 class FunctionForm(ModelForm):
@@ -28,14 +32,37 @@ class CustomStepForm(ModelForm):
         super(CustomStepForm, self).__init__(*args, **kwargs)
         if self.instance:
             arguments = self.instance.function.arguments
-            self.initial.update({'values': arguments})
+            self.initial.update({'values': self.instance.values or arguments})
             self.fields['values'].label = unicode(self.instance)
 
+
+class CustomStepFormSet(BaseModelFormSet):
+
+    def __init__(self, *args, **kwargs):
+        super(CustomStepFormSet, self).__init__(*args, **kwargs)
+
+    def exec_steps(self, image_field, preview=False):
+        if preview:
+            image = thumbnail(PILImage.open(image_field.file))
+        else:
+            image = PILImage.open(image_field.file)
+        variables = {}
+        for form in self.forms:
+            step = form.instance
+            inputs = map(lambda x: getattr(variables, str(x), image),
+                         step.prepare_inputs())
+            variables[step.order] = step.exec_function(inputs,
+                                                       values=step.values)
+            output = variables[step.order]
+        return output
+
+
 StepFormSet = modelformset_factory(Step,
+                                   form=CustomStepForm,
+                                   formset=CustomStepFormSet,
                                    exclude=('order', 'inputs', 'method',
                                             'function'),
-                                   extra=0,
-                                   form=CustomStepForm)
+                                   extra=0)
 
 
 class SelectMethodForm(forms.Form):

@@ -16,10 +16,11 @@
 {% block content %}
 {% thumbnail image_object.image "500x500" as im %}
 <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-<form method="post" action="{% url methods_apply image_object.id %}">
+<form method="post" action="{% url methods_apply image_object.id %}" id="id_method_form">
 {% csrf_token %}
 {{ select_method_form.as_p }}
 <input type="button" value="{% trans "Preview" %}" id="id_preview" class="hidden button" />
+<input type="hidden" value="" name="id_preview_value" id="id_preview_value" />
 <input type="button" value="{% trans "Custom" %}" id="id_custom" class="hidden button" />
 <input type="submit" value="{% trans "Run" %}" id="id_run" class="hidden button" />
 <fieldset id="id_fieldset" class="hidden">
@@ -27,6 +28,11 @@
 </form>
 {% empty %}
 <em>No image</em>
+{% endthumbnail %}
+{% thumbnail image_object.handwritten_mask "500x500" as him %}
+<a href="{{ image_object.handwritten_mask.url }}" id="id_handwritten_mask">
+    <img src="{{ him.url }}" width="{{ him.width }}" height="{{ him.height }}">
+</a>
 {% endthumbnail %}
 {% endblock %}
 

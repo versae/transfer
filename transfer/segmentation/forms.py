@@ -35,7 +35,7 @@ class InitialImageForm(ModelForm):
         model = Image
         exclude = ("image_mask", "image_vertical_lines", "status", "small_ccs",
                    "medium_ccs", "large_ccs", "preprocessed_image",
-                   "final_regions", "handritten_mask", "final")
+                   "final_regions", "handwritten_mask", "final")
 
     process = forms.ChoiceField(label=_(u"Apply recognition method for"),
                                 choices=PROCESSES_TYPES,
@@ -70,7 +70,7 @@ class InitialImageForm(ModelForm):
             name = suf.name
             if "." in name:
                 name = name.split(".")[0]
-            self.instance.handritten_mask.save("%s_h.png" % name, suf,
+            self.instance.handwritten_mask.save("%s_h.png" % name, suf,
                                                save=False)
         return super(InitialImageForm, self).save(*args, **kwargs)
 
@@ -82,7 +82,7 @@ class PreprocessImageForm(ModelForm):
         exclude = ("image_mask", "image_vertical_lines", "status", "small_ccs",
                    "medium_ccs", "large_ccs", "preprocessed_image",
                    "final_regions", "image", "notes", "title",
-                   "handritten_mask")
+                   "handwritten_mask")
 
     threshold = forms.IntegerField(_(u"Binarization threshold"))
     base64_image = forms.CharField(_(u"Base64 encoded image"),

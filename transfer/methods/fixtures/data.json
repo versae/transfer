@@ -1,0 +1,198 @@
+[
+    {
+        "pk": 1, 
+        "model": "methods.function", 
+        "fields": {
+            "function": "binarize", 
+            "inputs": 1, 
+            "name": "Binarization", 
+            "module": "segmentation.utils", 
+            "arguments": "threshold=None, grayscale=True, rc=False", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "methods.function", 
+        "fields": {
+            "function": "remove_foreground", 
+            "inputs": 1, 
+            "name": "Foregroung removal", 
+            "module": "segmentation.utils", 
+            "arguments": "foreground_colour=(0, 0, 0), background_colour=(255, 255, 255), tolerance=2", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "methods.function", 
+        "fields": {
+            "function": "extract_colours", 
+            "inputs": 1, 
+            "name": "Extract colours", 
+            "module": "segmentation.utils", 
+            "arguments": "k=None", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "methods.function", 
+        "fields": {
+            "function": "convert", 
+            "inputs": 1, 
+            "name": "Mode conversor", 
+            "module": "segmentation.utils", 
+            "arguments": "mode=\"RGB\"", 
+            "description": "\"1\", \"L\", \"RGB\""
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "methods.function", 
+        "fields": {
+            "function": "equalize", 
+            "inputs": 1, 
+            "name": "Histogram equalization", 
+            "module": "segmentation.utils", 
+            "arguments": "", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "methods.function", 
+        "fields": {
+            "function": "gaussian_filter", 
+            "inputs": 1, 
+            "name": "Gaussian filter", 
+            "module": "segmentation.utils", 
+            "arguments": "size=5", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "methods.function", 
+        "fields": {
+            "function": "draw_regions", 
+            "inputs": 2, 
+            "name": "Draw filtered regions", 
+            "module": "segmentation.utils", 
+            "arguments": "outline=[\"green\", \"blue\", \"red\"], fill=[None, None, None], mode_pass=[False, False, False]", 
+            "description": "original_image, mask_image and the rest of arguments."
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "methods.function", 
+        "fields": {
+            "function": "activity_detector", 
+            "inputs": 1, 
+            "name": "Activity detector", 
+            "module": "segmentation.utils", 
+            "arguments": "radius=10, increment=16", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "methods.function", 
+        "fields": {
+            "function": "draw_overlay", 
+            "inputs": 2, 
+            "name": "Draw overlay", 
+            "module": "segmentation.utils", 
+            "arguments": "colour=(255, 0, 0)", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "methods.function", 
+        "fields": {
+            "function": "extract_handwritten_text", 
+            "inputs": 1, 
+            "name": "Extract handwritten text", 
+            "module": "segmentation.utils", 
+            "arguments": "factor=2", 
+            "description": "The factor argument can be a float value or a list of values."
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "methods.function", 
+        "fields": {
+            "function": "kfill", 
+            "inputs": 1, 
+            "name": "kFill", 
+            "module": "segmentation.utils", 
+            "arguments": "k=2", 
+            "description": "kFill algorithm. Adapted to kfill modified through python-gamera from http://www.cs.buu.ac.th/~krisana/cv/paper/Apccas98.pdf"
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "methods.function", 
+        "fields": {
+            "function": "kfill_colour", 
+            "inputs": 1, 
+            "name": "Coloured kFill", 
+            "module": "segmentation.utils", 
+            "arguments": "k=3, accuracy=0", 
+            "description": "Based on paper http://www.wseas.us/e-library/conferences/2009/moscow/ISCGAV/ISCGAV09.pdf"
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "methods.function", 
+        "fields": {
+            "function": "remove_noise", 
+            "inputs": 1, 
+            "name": "Noise removal", 
+            "module": "segmentation.utils", 
+            "arguments": "size=2", 
+            "description": ""
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "methods.method", 
+        "fields": {
+            "name": "Process image"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "methods.step", 
+        "fields": {
+            "function": 10, 
+            "inputs": "0", 
+            "values": "factor=[2, 0.25]", 
+            "order": 1, 
+            "method": 1
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "methods.step", 
+        "fields": {
+            "function": 13, 
+            "inputs": "1", 
+            "values": "", 
+            "order": 2, 
+            "method": 1
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "methods.step", 
+        "fields": {
+            "function": 9, 
+            "inputs": "0,2", 
+            "values": "", 
+            "order": 3, 
+            "method": 1
+        }
+    }
+]

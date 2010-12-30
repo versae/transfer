@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
+from cStringIO import StringIO
+from PIL import Image as PILImage
+from os import path
+
 from django.core.urlresolvers import reverse
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -30,7 +35,20 @@ def methods_apply(request, image_id):
     if data:
         step_formset = StepFormSet(data=data)
         if step_formset.is_valid():
-            image_object.final = step_formset.apply_method(image_object.image)
+            temp_handle = StringIO()
+            preview = (data["id_preview_value"].lower() == "true")
+            handwritten_mask = step_formset.exec_steps(image_object.image,
+                                                       preview=preview)
+            handwritten_mask.save(temp_handle, 'png')
+            temp_handle.seek(0)
+            suf = SimpleUploadedFile(path.split(image_object.image.name)[-1],
+                                     temp_handle.read(),
+                                     content_type='image/png')
+            name = suf.name
+            if "." in name:
+                name = name.split(".")[0]
+            image_object.handwritten_mask.save("%s_h.png" % name, suf)
+            image_object.save()
     return render_to_response('apply.html',
                               {'image_object': image_object,
                                'select_method_form': select_method_form},

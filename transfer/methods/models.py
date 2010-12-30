@@ -17,6 +17,7 @@ TYPES_CHOICES = (
 class Function(models.Model):
     name = models.CharField(_(u'Name'), max_length=200)
     description = models.TextField(_(u'Description'), blank=True, null=True)
+    inputs = models.PositiveIntegerField(_(u'# Image inputs'), default=1)
     arguments = models.TextField((u'Arguments'), blank=True, null=True)
     function = models.CharField(_(u'Function'), max_length=100)
     module = models.CharField(_(u'Module'), max_length=200)
@@ -59,10 +60,10 @@ class Step(models.Model):
     values = models.TextField((u'Values'), blank=True, null=True)
 
     def __unicode__(self):
-        inputs = self.inputs.split(",")
+        inputs = self.prepare_inputs()
         inputs_vars = []
         for input in inputs:
-            if not int(input) or int(input) >= self.order:
+            if not input or input >= self.order:
                 inputs_vars.append(u"INPUT")
             else:
                 inputs_vars.append(u"#%s" % (input))
@@ -71,6 +72,9 @@ class Step(models.Model):
             inputs_str = u"%s, " % (inputs_str)
         return u"#%s ← %s(%s%s)" % (self.order, self.function.name, inputs_str,
                                     self.values)
+
+    def prepare_inputs(self):
+        return map(lambda x: int(x.strip()), self.inputs.split(","))
 
     def exec_function(self, inputs, values=None):
         func = self.function.import_function()

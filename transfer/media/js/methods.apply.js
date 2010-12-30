@@ -19,12 +19,8 @@
             });
 
             $("#id_preview").click(function() {
-                $.ajax({
-                    url: './?preview=true',
-                    success: function(data) {
-                        $('#id_fieldset').html(data);
-                    }
-                });
+                $("#id_preview_value").val("true");
+                $("#id_method_form").submit();
             });
 
             $("#id_custom").click(function() {
