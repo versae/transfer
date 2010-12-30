@@ -5,16 +5,15 @@
             $("#id_method").change(function() {
                 var value;
                 value = $(this).val();
+                $(".button").hide();
                 if (value) {
-                    $(".button").show();
                     $.ajax({
                         url: '/methods/form/'+ value,
                         success: function(data) {
                             $('#id_fieldset').html(data);
+                            $(".button").show();
                         }
                     });
-                } else {
-                    $(".button").hide();
                 }
             });
 
