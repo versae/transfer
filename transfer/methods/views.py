@@ -9,14 +9,15 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from methods.forms import MethodForm, StepFormSet, SelectMethodForm
+from methods.forms import (CustomStepFormSet, MethodForm, StepFormSet,
+                           SelectMethodForm)
 from methods.models import Method, Step
 
 from segmentation.models import Image
 
 
 def methods_create(request):
-    step_formset = StepFormSet()
+    step_formset = StepFormSet(instance=Step())
     return render_to_response('create.html',
                               {'step_formset': step_formset},
                               context_instance=RequestContext(request))
@@ -33,7 +34,7 @@ def methods_apply(request, image_id):
     select_method_form = SelectMethodForm()
     data = request.POST
     if data:
-        step_formset = StepFormSet(data=data)
+        step_formset = CustomStepFormSet(data=data)
         if step_formset.is_valid():
             temp_handle = StringIO()
             preview = (data["id_preview_value"].lower() == "true")
@@ -70,7 +71,7 @@ def methods_form(request, method_id):
     if request.is_ajax():
         method_object = Method.objects.get(id=method_id)
         queryset = Step.objects.filter(method=method_object).order_by('order')
-        step_formset = StepFormSet(queryset=queryset)
+        step_formset = CustomStepFormSet(queryset=queryset)
     return render_to_response('form.html',
                               {'step_formset': step_formset},
                               context_instance=RequestContext(request))

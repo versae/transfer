@@ -2,6 +2,9 @@
 {% load i18n %}
 
 {% block extra_scripts %}
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.formset.min.js"></script>
+{{ step_formset.media }}
 {% endblock %}
 
 {% block title %}
@@ -13,6 +16,32 @@
 {% endblock %}
 
 {% block content %}
-{{ step_formset }}
+<form id="id_method_form" action="." method="post">
+{{ step_formset.management_form }}
+<table>
+<tbody>
+{% for form in step_formset.forms %}
+    <tr><td>{{ form.as_p }}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</form>
+
+<script type="text/javascript">
+(function($) {
+    $(document).ready(function() {
+        $('#id_method_form table tbody tr').formset({
+          prefix: '{{ step_formset.prefix }}',
+          addText: '{% trans "Add another" %}',
+          addCssClass: "add-row",
+          deleteText: '{% trans "Remove" %}',
+          deleteCssClass: "inline-deletelink",
+          formCssClass: "dynamic-{{ step_formset.prefix }}",
+          emptyCssClass: "add-row"
+        });
+    });
+})(jQuery.noConflict());
+</script>
+
 {% endblock %}
 

@@ -3,7 +3,8 @@ from PIL import Image as PILImage
 
 from django import forms
 from django.forms import ModelForm
-from django.forms.models import BaseModelFormSet, modelformset_factory
+from django.forms.models import (BaseModelFormSet, modelformset_factory,
+                                 inlineformset_factory)
 from django.utils.translation import gettext as _
 
 from methods.models import Function, Method, Step
@@ -23,23 +24,10 @@ class MethodForm(ModelForm):
         model = Method
 
 
-class CustomStepForm(ModelForm):
-
-    class Meta:
-        model = Step
+class StepBaseFormSet(BaseModelFormSet):
 
     def __init__(self, *args, **kwargs):
-        super(CustomStepForm, self).__init__(*args, **kwargs)
-        if self.instance:
-            arguments = self.instance.function.arguments
-            self.initial.update({'values': self.instance.values or arguments})
-            self.fields['values'].label = unicode(self.instance)
-
-
-class CustomStepFormSet(BaseModelFormSet):
-
-    def __init__(self, *args, **kwargs):
-        super(CustomStepFormSet, self).__init__(*args, **kwargs)
+        super(StepBaseFormSet, self).__init__(*args, **kwargs)
 
     def exec_steps(self, image_field, preview=False):
         if preview:
@@ -57,12 +45,30 @@ class CustomStepFormSet(BaseModelFormSet):
         return output
 
 
-StepFormSet = modelformset_factory(Step,
-                                   form=CustomStepForm,
-                                   formset=CustomStepFormSet,
-                                   exclude=('order', 'inputs', 'method',
-                                            'function'),
-                                   extra=0)
+class CustomStepForm(ModelForm):
+
+    class Meta:
+        model = Step
+
+    def __init__(self, *args, **kwargs):
+        super(CustomStepForm, self).__init__(*args, **kwargs)
+        if self.instance:
+            arguments = self.instance.function.arguments
+            self.initial.update({'values': self.instance.values or arguments})
+            self.fields['values'].label = unicode(self.instance)
+
+
+CustomStepFormSet = modelformset_factory(Step,
+                                       form=CustomStepForm,
+                                       formset=StepBaseFormSet,
+                                       exclude=('order', 'inputs', 'method',
+                                                'function'),
+                                       extra=0)
+
+
+StepFormSet = inlineformset_factory(Method, Step,
+                                    can_delete=True,
+                                    extra=1)
 
 
 class SelectMethodForm(forms.Form):
