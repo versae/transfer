@@ -18,8 +18,18 @@ from segmentation.models import Image
 
 def methods_create(request):
     step_formset = StepFormSet(instance=Step())
+    method_form = MethodForm()
+    if request.POST:
+        data = request.POST
+        step_formset = StepFormSet(data=data)
+        method_form = MethodForm(data=data)
+        if step_formset.is_valid() and method_form.is_valid():
+            method_object = method_form.save()
+            step_formset = StepFormSet(instance=method_object, data=data)
+            step_formset.save()
     return render_to_response('create.html',
-                              {'step_formset': step_formset},
+                              {'step_formset': step_formset,
+                               'method_form': method_form},
                               context_instance=RequestContext(request))
 
 
@@ -32,8 +42,8 @@ def methods_list(request):
 def methods_apply(request, image_id):
     image_object = Image.objects.get(id=image_id)
     select_method_form = SelectMethodForm()
-    data = request.POST
-    if data:
+    if request.POST:
+        data = request.POST
         step_formset = CustomStepFormSet(data=data)
         if step_formset.is_valid():
             temp_handle = StringIO()
@@ -59,7 +69,7 @@ def methods_apply(request, image_id):
 def methods_run(request, image_id, method_id, preview=None):
     image_object = Image.objects.get(id=image_id)
     method_object = Method.objects.get(id=method_id)
-    select_method_form = SelectMethodForm()
+    select_method_form = SelectMethodForm(data=request.POST)
     return render_to_response('apply.html',
                               {'image_object': image_object,
                                'select_method_form': select_method_form},

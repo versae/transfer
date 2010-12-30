@@ -22,6 +22,7 @@ class MethodForm(ModelForm):
 
     class Meta:
         model = Method
+        exclude = ('functions', )
 
 
 class StepBaseFormSet(BaseModelFormSet):

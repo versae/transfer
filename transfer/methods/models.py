@@ -45,6 +45,7 @@ class Method(models.Model):
     name = models.CharField(_(u'Name'), max_length=200)
     functions = models.ManyToManyField(Function, verbose_name=_(u'functions'),
                                        through='Step')
+    description = models.TextField(_(u'Description'), blank=True, null=True)
 
     def __unicode__(self):
         return u"%s" % (self.name)

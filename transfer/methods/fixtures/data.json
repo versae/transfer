@@ -159,7 +159,8 @@
         "pk": 1, 
         "model": "methods.method", 
         "fields": {
-            "name": "Process image"
+            "name": "Process image",
+            "description": ""
         }
     }, 
     {

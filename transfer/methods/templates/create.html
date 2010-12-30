@@ -4,6 +4,7 @@
 {% block extra_scripts %}
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.formset.min.js"></script>
+{{ method_form.media }}
 {{ step_formset.media }}
 {% endblock %}
 
@@ -17,6 +18,8 @@
 
 {% block content %}
 <form id="id_method_form" action="." method="post">
+{% csrf_token %}
+{{ method_form.as_p }}
 {{ step_formset.management_form }}
 <table>
 <tbody>
@@ -25,6 +28,7 @@
 {% endfor %}
 </tbody>
 </table>
+<input type="submit" value="{% trans "Save" %}" id="id_save" class="button" />
 </form>
 
 <script type="text/javascript">
