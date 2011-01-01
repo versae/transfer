@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+{% trans "Composer" %}: {{ mode|capfirst }}
+{% endblock %}
+
+{% block header %}
+<h1>{% trans "Composer" %}: {{ mode|capfirst }}</h1>
+{% endblock %}
+
+{% block actions %}
+<a href="{% url methods_list "functions" %}">{% trans "Functions" %}</a> |
+<a href="{% url methods_list "methods" %}">{% trans "Methods" %}</a>
+{% endblock %}
+
+{% block content %}
+
+{% if mode == "functions" %}
+    <ul>
+    {% for object in objects %}
+        <li>
+            {{ object.name }}: {{ object.description }}
+            <ul>
+                <li>{% trans "# Image inputs" %}: {{ object.inputs }}</li>
+                <li>{% trans "Arguments and default values" %}: {{ object.arguments }}</li>
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% if mode == "methods" %}
+<ul>
+    {% for object in objects %}
+        <li>
+            [ <a href="{% url methods_edit object.id %}">{% trans "Edit" %}</a> ]
+            {{ object.name }}: {{ object.description }}
+            <ul>
+                {% for step in object.step_set.all %}
+                    <li>{{ step }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url methods_create %}">{% trans "New method" %}</a>
+{% endif %}
+{% endblock %}
+

@@ -9,17 +9,16 @@
 {% endblock %}
 
 {% block title %}
-{% trans "Methods" %}
+{% trans "Composer" %}: {{ mode }}
 {% endblock %}
 
 {% block header %}
-<h1>{% trans "Compose" %}</h1>
+<h1>{% trans "Composer" %}: {{ mode }}</h1>
 {% endblock %}
 
 {% block actions %}
-<a href="{% url methods_list "function" %}">{% trans "Functions" %}</a> |
-<a href="{% url methods_list "method" %}">{% trans "Methods" %}</a> |
-<a href="{% url methods_list "help" %}">{% trans "Help" %}</a>
+<a href="{% url methods_list "functions" %}">{% trans "Functions" %}</a> |
+<a href="{% url methods_list "methods" %}">{% trans "Methods" %}</a>
 {% endblock %}
 
 {% block content %}

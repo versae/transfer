@@ -1,41 +1,54 @@
 # -*- coding: utf-8 -*-
 from cStringIO import StringIO
-from PIL import Image as PILImage
 from os import path
 
-from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.translation import gettext as _
 
 from methods.forms import (CustomStepFormSet, MethodForm, StepFormSet,
                            SelectMethodForm)
-from methods.models import Method, Step
+from methods.models import Method, Step, Function
 
 from segmentation.models import Image
 
 
-def methods_create(request):
-    step_formset = StepFormSet(instance=Step())
-    method_form = MethodForm()
+def methods_editcreate(request, method_id=None):
+    method_object = None
+    if method_id:
+        method_object = Method.objects.get(id=method_id)
+        step_formset = StepFormSet(instance=method_object)
+        method_form = MethodForm(instance=method_object)
+        mode = _(u"Edit")
+    else:
+        step_formset = StepFormSet(instance=Step())
+        method_form = MethodForm()
+        mode = _(u"Create")
     if request.POST:
         data = request.POST
-        step_formset = StepFormSet(data=data)
-        method_form = MethodForm(data=data)
+        step_formset = StepFormSet(instance=method_object, data=data)
+        method_form = MethodForm(instance=method_object, data=data)
         if step_formset.is_valid() and method_form.is_valid():
             method_object = method_form.save()
             step_formset = StepFormSet(instance=method_object, data=data)
             step_formset.save()
-    return render_to_response('create.html',
+    return render_to_response('editcreate.html',
                               {'step_formset': step_formset,
-                               'method_form': method_form},
+                               'method_form': method_form,
+                               'mode': mode},
                               context_instance=RequestContext(request))
 
 
-def methods_list(request):
+def methods_list(request, mode):
+    objects = None
+    if mode == "functions":
+        objects = Function.objects.all()
+    elif mode == "methods":
+        objects = Method.objects.all()
     return render_to_response('list.html',
-                              {},
+                              {'mode': mode,
+                               'objects': objects},
                               context_instance=RequestContext(request))
 
 
@@ -68,7 +81,7 @@ def methods_apply(request, image_id):
 
 def methods_run(request, image_id, method_id, preview=None):
     image_object = Image.objects.get(id=image_id)
-    method_object = Method.objects.get(id=method_id)
+    # method_object = Method.objects.get(id=method_id)
     select_method_form = SelectMethodForm(data=request.POST)
     return render_to_response('apply.html',
                               {'image_object': image_object,
