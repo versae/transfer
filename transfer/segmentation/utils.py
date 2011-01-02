@@ -680,11 +680,11 @@ def thumbnail(im, max_heigth=500):
         return im
     aspect_ratio = float(im.size[0]) / float(im.size[1])
     if im.size[1] > 500:
-        return im.resize((aspect_ratio * max_heigth, max_heigth),
+        return im.resize((int(aspect_ratio * max_heigth), max_heigth),
                          Image.ANTIALIAS)
 
 
-def filters(im, filter_list=[]):
+def filters(im, filter_list=["MedianFilter"]):
     """PIL Filters through ImageFiler
     Options are:
      * BLUR
