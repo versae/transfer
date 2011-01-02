@@ -684,6 +684,33 @@ def thumbnail(im, max_heigth=500):
                          Image.ANTIALIAS)
 
 
+def filters(im, filter_list=[]):
+    """PIL Filters through ImageFiler
+    Options are:
+     * BLUR
+     * SHARPEN
+     * GaussianBlur
+     * SMOOTH
+     * CONTOUR
+     * SMOOTH_MORE
+     * DETAIL
+     * MaxFilter
+     * UnsharpMask
+     * EDGE_ENHANCE
+     * MedianFilter
+     * EDGE_ENHANCE_MORE
+     * MinFilter
+     * EMBOSS
+     * ModeFilter
+     * FIND_EDGES
+     * RankFilter
+    """
+    out = im
+    for filter_name in filter_list:
+        out = out.filter(getattr(ImageFilter, filter_name))
+    return out
+
+
 def convert(im, mode="RGB"):
     return im.convert(mode)
 
