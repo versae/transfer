@@ -198,6 +198,39 @@ color:#AEF080;
   padding-bottom:10px;
 }
 
+#content ul {
+list-style: none;
+}
+ 
+#content ul li {
+padding: 8px 15px;
+margin: 10px 0;
+background: rgba(100,156,57,0.1);
+}
+
+#content ul li:hover {
+padding: 8px 15px;
+margin: 10px 0;
+background: rgba(100,156,57,0.3);
+}
+ 
+/*ul li:nth-child(odd) {*/
+/*background: rgba(25,25,25,0.1);*/
+/*}*/
+/* */
+/*ul li:nth-child(odd):hover {*/
+/*background: rgba(25,25,25,0.3);	*/
+/*}*/
+/* */
+/*ul li:nth-child(even) {*/
+/*background: rgba(25,25,25,0.3);*/
+/*}*/
+/* */
+/*ul li:nth-child(even):hover {*/
+/*background: rgba(25,25,25,0.5);*/
+/*}*/
+
+
 .main-content {
     background-color: #fff;
     padding: 5px 10px;
