@@ -27,9 +27,24 @@
 {{ method_form.as_p }}
 {{ step_formset.management_form }}
 <table>
+<thead>
+    <tr>
+        <td>{% trans "Order" %}</td>
+        <td>{% trans "Inputs" %}</td>
+        <td>{% trans "Function" %}</td>
+        <td>{% trans "Values" %}</td>
+        <td>{% trans "Delete?" %}</td>
+    </tr>
+</thead>
 <tbody>
 {% for form in step_formset.forms %}
-    <tr><td>{{ form.as_p }}</td></tr>
+    <tr class="{% cycle 'row1' 'row2' %}">
+        <td>{{ form.order.errors }}{{ form.order }}</td>
+        <td>{{ form.inputs.errors }}{{ form.inputs }}</td>
+        <td>{{ form.function.errors }}{{ form.function }}</td>
+        <td>{{ form.values.errors }}{{ form.values }}</td>
+        <td class="delete"></td>
+    </tr>
 {% endfor %}
 </tbody>
 </table>
