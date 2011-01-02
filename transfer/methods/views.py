@@ -43,9 +43,9 @@ def methods_editcreate(request, method_id=None):
 def methods_list(request, mode):
     objects = None
     if mode == "functions":
-        objects = Function.objects.all()
+        objects = Function.objects.all().order_by("name")
     elif mode == "methods":
-        objects = Method.objects.all()
+        objects = Method.objects.all().order_by("name")
     return render_to_response('list.html',
                               {'mode': mode,
                                'objects': objects},

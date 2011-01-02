@@ -8,7 +8,7 @@
             "name": "Binarization", 
             "module": "segmentation.utils", 
             "arguments": "threshold=None, grayscale=True, rc=False", 
-            "description": ""
+            "description": "Binarize the image input using by default the Otsu method.\r\n- threshold: integer. Threshold to overwrite the Otsu method.\r\n- grayscale: boolean. Define if the image must be returned like a posterized or not.\r\n- rc: boolean. Apply the Riddler-Calvard method."
         }
     }, 
     {
@@ -17,10 +17,10 @@
         "fields": {
             "function": "remove_foreground", 
             "inputs": 1, 
-            "name": "Foregroung removal", 
+            "name": "Foreground removal", 
             "module": "segmentation.utils", 
             "arguments": "foreground_colour=(0, 0, 0), background_colour=(255, 255, 255), tolerance=2", 
-            "description": ""
+            "description": "Remove a foreground colour from the image input. It's a own algorithm based of connected components detection and classification that aims to reduce the noise in the tipical foreground colour removal activity.\r\n- foreground_colour: integer tuple. Define a RGB colour using a 3-tuple of values in range from 0 to 255.\r\n- background_colour: integer tuple. Define a RGB colour using a 3-tuple of values in range from 0 to 255.\r\n- tolerance: integer/float. Define the tolerance to fill a pixel with the mode, foreground or median colour."
         }
     }, 
     {
@@ -32,7 +32,7 @@
             "name": "Extract colours", 
             "module": "segmentation.utils", 
             "arguments": "k=None", 
-            "description": ""
+            "description": "Posterize and extract the colours on the image input removing all gray levels.\r\n- k: integer. Define the size of neighborhood of a pixel in order to take de decission about removing it or not."
         }
     }, 
     {
@@ -44,7 +44,7 @@
             "name": "Mode conversor", 
             "module": "segmentation.utils", 
             "arguments": "mode=\"RGB\"", 
-            "description": "\"1\", \"L\", \"RGB\""
+            "description": "Change the mode of the image among binary, grayscale and RGB.\r\n- mode: string. One of values \"1\" (binary), \"L\" (grayscale) and \"RGB\" (RGB)."
         }
     }, 
     {
@@ -56,7 +56,7 @@
             "name": "Histogram equalization", 
             "module": "segmentation.utils", 
             "arguments": "", 
-            "description": ""
+            "description": "Taken from http://effbot.org/zone/pil-histogram-equalization.htm"
         }
     }, 
     {
@@ -68,7 +68,7 @@
             "name": "Gaussian filter", 
             "module": "segmentation.utils", 
             "arguments": "size=5", 
-            "description": ""
+            "description": "- size: integer. Standard deviation of the Gaussian distribution."
         }
     }, 
     {
@@ -80,7 +80,7 @@
             "name": "Draw filtered regions", 
             "module": "segmentation.utils", 
             "arguments": "outline=[\"green\", \"blue\", \"red\"], fill=[None, None, None], mode_pass=[False, False, False]", 
-            "description": "original_image, mask_image and the rest of arguments."
+            "description": "Calculate the connected components of the second image argument and draw the classified connected components over the first image argument. Based on paper http://research.google.com/pubs/pub35094.html it analyze the connected components using a noise factor of 5.4264e-5, according the article, connected components with heigth less than 7px @300ppi in tabloid paper sizes are considered small.\r\n- outline: named colour tuple. Define the colour outline of the small, medium and large connected components, respectively.\r\n- fill: named colour tuple. Define the colour fill of the small, medium and large connected components, respectively.\r\n- mode_pass: integer/boolean tuple. Define if the connected component must be drawn if the width or heigth are several times over the mode. The tuple define these times for small, medium and large."
         }
     }, 
     {
@@ -92,7 +92,7 @@
             "name": "Activity detector", 
             "module": "segmentation.utils", 
             "arguments": "radius=10, increment=16", 
-            "description": ""
+            "description": "Based on http://www.ece.umassd.edu/faculty/acosta/icassp/icassp_2004/pdfs/0300229.pdf\r\nCreate an grayscale image according to the collision of the adjacent connected components expanded a number of pixels. The black pixels represent no activity, grayer represent more activity (collisions).\r\n- radius: integer. Number of pixels to expand de connected component in order to analyze the activity dectection.\r\n- increment: integer. Increment over the basic black color every time a collision is detected."
         }
     }, 
     {
@@ -104,7 +104,7 @@
             "name": "Draw overlay", 
             "module": "segmentation.utils", 
             "arguments": "colour=(255, 0, 0)", 
-            "description": ""
+            "description": "Draw over the first image argument the color 'colour' using a binarized image mask as a second image input argument.\r\n- colour: integer tuple. Tuple of length 3 and with values between 0 and 255 (RGB colour)."
         }
     }, 
     {
@@ -116,7 +116,7 @@
             "name": "Extract handwritten text", 
             "module": "segmentation.utils", 
             "arguments": "factor=2", 
-            "description": "The factor argument can be a float value or a list of values."
+            "description": "One of our algorithm created for extract handwritten text written in different colours in respect of background or foreground (machine printed) text on the image.\r\n- factor: float, float list, float tuple: Set the brightness and process the image iteratively if a list or tuple is passed."
         }
     }, 
     {
@@ -128,7 +128,7 @@
             "name": "kFill", 
             "module": "segmentation.utils", 
             "arguments": "k=2", 
-            "description": "kFill algorithm. Adapted to kfill modified through python-gamera from http://www.cs.buu.ac.th/~krisana/cv/paper/Apccas98.pdf"
+            "description": "kFill algorithm. Adapted to kfill modified through python-gamera from http://www.cs.buu.ac.th/~krisana/cv/paper/Apccas98.pdf\r\n- k: integer. Size of the window."
         }
     }, 
     {
@@ -140,7 +140,7 @@
             "name": "Coloured kFill", 
             "module": "segmentation.utils", 
             "arguments": "k=3, accuracy=0", 
-            "description": "Based on paper http://www.wseas.us/e-library/conferences/2009/moscow/ISCGAV/ISCGAV09.pdf"
+            "description": "Modified kFill algorithm and inspired on paper http://www.wseas.us/e-library/conferences/2009/moscow/ISCGAV/ISCGAV09.pdf\r\n- k: integer. The size of window.\r\n- accuracy: integer. Lower limit of core pixels on."
         }
     }, 
     {
@@ -152,15 +152,27 @@
             "name": "Noise removal", 
             "module": "segmentation.utils", 
             "arguments": "size=2", 
-            "description": ""
+            "description": "Basic noise removal converting the image to grayscale, bluring with Gaussian filter and binarizing the image with Riddler-Calvard method.\r\n- size: integer. Standard deviation of the Gaussian distribution."
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "methods.function", 
+        "fields": {
+            "function": "filters", 
+            "inputs": 1, 
+            "name": "Filters", 
+            "module": "segmentation.utils", 
+            "arguments": "filter_list=[\"MedianFilter\"]", 
+            "description": "Apply PIL Image filters.\r\nThe only arguments is a list of these strings:\r\n     * BLUR\r\n     * SHARPEN\r\n     * GaussianBlur\r\n     * SMOOTH\r\n     * CONTOUR\r\n     * SMOOTH_MORE\r\n     * DETAIL\r\n     * MaxFilter\r\n     * UnsharpMask\r\n     * EDGE_ENHANCE\r\n     * MedianFilter\r\n     * EDGE_ENHANCE_MORE\r\n     * MinFilter\r\n     * EMBOSS\r\n     * ModeFilter\r\n     * FIND_EDGES\r\n     * RankFilter"
         }
     }, 
     {
         "pk": 1, 
         "model": "methods.method", 
         "fields": {
-            "name": "Process image",
-            "description": ""
+            "name": "Process image", 
+            "description": "Proceso."
         }
     }, 
     {

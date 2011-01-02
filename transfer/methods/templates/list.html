@@ -20,7 +20,7 @@
     <ul>
     {% for object in objects %}
         <li>
-            {{ object.name }}: <pre>{{ object.description }}</pre>
+            <strong>{{ object.name }}</strong><br/><pre>{{ object.description }}</pre>
             <ul>
                 <li>{% trans "# Image inputs" %}: <pre>{{ object.inputs }}</pre></li>
                 <li>{% trans "Arguments and default values" %}: <pre>{{ object.arguments }}</pre></li>
