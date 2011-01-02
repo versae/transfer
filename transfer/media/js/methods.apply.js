@@ -16,6 +16,7 @@
                     });
                 }
             });
+            $("#id_method").change();
 
             $("#id_preview").click(function() {
                 $("#id_preview_value").val("true");

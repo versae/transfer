@@ -16,9 +16,22 @@
 {% block content %}
 {% thumbnail image_object.image "500x500" as im %}
 <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+
 <form method="post" action="{% url methods_apply image_object.id %}" id="id_method_form">
 {% csrf_token %}
 {{ select_method_form.as_p }}
+{% if errors %}
+{% trans "The next erros has been found" %}
+<ul>
+    {% for error in errors %}
+        <li>{{ error.0 }}
+            <ul>
+                <li><pre>{{ error.1 }}, {{ error.2 }}</pre></li>
+            </ul>
+        </li>
+    {% endfor %}
+</ul>
+{% endif %}
 <input type="button" value="{% trans "Preview" %}" id="id_preview" class="hidden button" />
 <input type="hidden" value="" name="id_preview_value" id="id_preview_value" />
 <input type="button" value="{% trans "Custom" %}" id="id_custom" class="hidden button" />

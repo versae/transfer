@@ -30,20 +30,27 @@ class StepBaseFormSet(BaseModelFormSet):
     def __init__(self, *args, **kwargs):
         super(StepBaseFormSet, self).__init__(*args, **kwargs)
 
-    def exec_steps(self, image_field, preview=False):
+    def exec_steps(self, image_field, preview=False, errors=False):
+        error_list = []
         if preview:
             image = thumbnail(PILImage.open(image_field.file))
         else:
             image = PILImage.open(image_field.file)
         variables = {}
         for form in self.forms:
-            step = form.instance
-            inputs = map(lambda x: getattr(variables, str(x), image),
-                         step.prepare_inputs())
-            variables[step.order] = step.exec_function(inputs,
-                                                       values=step.values)
-            output = variables[step.order]
-        return output
+            try:
+                step = form.instance
+                inputs = map(lambda x: getattr(variables, str(x), image),
+                             step.prepare_inputs())
+                variables[step.order] = step.exec_function(inputs,
+                                                           values=step.values)
+                output = variables[step.order]
+            except Exception as error:
+                error_list.append((step, type(error), error.args))
+        if errors:
+            return output, error_list
+        else:
+            return output
 
 
 class CustomStepForm(ModelForm):

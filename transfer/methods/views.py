@@ -55,17 +55,23 @@ def methods_list(request, mode):
 def methods_apply(request, image_id):
     image_object = Image.objects.get(id=image_id)
     select_method_form = SelectMethodForm()
+    exec_errors = None
     if request.POST:
         data = request.POST
         step_formset = CustomStepFormSet(data=data)
+        select_method_form = SelectMethodForm(data=data)
         if step_formset.is_valid():
             temp_handle = StringIO()
             preview = (data["id_preview_value"].lower() == "true")
-            handwritten_mask = step_formset.exec_steps(image_object.image,
-                                                       preview=preview)
+            errors = []
+            executed_steps = step_formset.exec_steps(image_object.image,
+                                                     preview=preview,
+                                                     errors=True)
+            (handwritten_mask, exec_errors) = executed_steps
             handwritten_mask.save(temp_handle, 'png')
             temp_handle.seek(0)
-            suf = SimpleUploadedFile(path.split(image_object.image.name)[-1],
+            path_split = path.split(image_object.image.name)[-1]
+            suf = SimpleUploadedFile(path_split,
                                      temp_handle.read(),
                                      content_type='image/png')
             name = suf.name
@@ -75,7 +81,8 @@ def methods_apply(request, image_id):
             image_object.save()
     return render_to_response('apply.html',
                               {'image_object': image_object,
-                               'select_method_form': select_method_form},
+                               'select_method_form': select_method_form,
+                               'errors': exec_errors},
                               context_instance=RequestContext(request))
 
 
