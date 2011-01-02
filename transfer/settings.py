@@ -114,3 +114,8 @@ INSTALLED_APPS = (
     'segmentation',
     'base',
 )
+
+try:
+    from local_settings import *
+except:
+    pass
