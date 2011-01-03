@@ -97,11 +97,10 @@ def methods_run(request, image_id, method_id, preview=None):
 
 
 def methods_form(request, method_id):
-    method_object = None
-    if request.is_ajax():
-        method_object = Method.objects.get(id=method_id)
-        queryset = Step.objects.filter(method=method_object).order_by('order')
-        step_formset = CustomStepFormSet(queryset=queryset)
+    # method_object = None
+    method_object = Method.objects.get(id=method_id)
+    queryset = Step.objects.filter(method=method_object).order_by('order')
+    step_formset = CustomStepFormSet(queryset=queryset)
     return render_to_response('form.html',
                               {'step_formset': step_formset},
                               context_instance=RequestContext(request))
