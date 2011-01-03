@@ -40,17 +40,19 @@ class StepBaseFormSet(BaseModelFormSet):
         for form in self.forms:
             try:
                 step = form.instance
-                inputs = map(lambda x: getattr(variables, str(x), image),
-                             step.prepare_inputs())
+
+                def _get_variable(x):
+                    return variables.get(x, image)
+
+                inputs = map(_get_variable, step.prepare_inputs())
                 variables[step.order] = step.exec_function(inputs,
                                                            values=step.values)
-                output = variables[step.order]
             except Exception as error:
                 error_list.append((step, type(error), error.args))
         if errors:
-            return output, error_list
+            return variables[step.order], error_list
         else:
-            return output
+            return variables[step.order]
 
 
 class CustomStepForm(ModelForm):
