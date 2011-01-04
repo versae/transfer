@@ -152,7 +152,7 @@ class Graph():
 #                    except:
 #                        print pixel
 #                        import ipdb;ipdb.set_trace()
-        image.save('output.png', "PNG")
+        #image.save('output.png', "PNG")
 
 def get_conected_pixels(im,i,j,width,height):
     pixels = []
