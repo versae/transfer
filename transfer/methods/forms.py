@@ -49,6 +49,10 @@ class StepBaseFormSet(BaseModelFormSet):
                                                            values=step.values)
             except Exception as error:
                 error_list.append((step, type(error), error.args))
+        if step:
+            output = variables.get(step.order, image)
+        else:
+            output = image
         if errors:
             return variables[step.order], error_list
         else:
