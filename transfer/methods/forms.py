@@ -36,27 +36,27 @@ class StepBaseFormSet(BaseModelFormSet):
             image = thumbnail(PILImage.open(image_field.file))
         else:
             image = PILImage.open(image_field.file)
+
+        def _get_variable(x):
+            return variables.get(x, image)
+
         variables = {}
         for form in self.forms:
             try:
                 step = form.instance
-
-                def _get_variable(x):
-                    return variables.get(x, image)
-
                 inputs = map(_get_variable, step.prepare_inputs())
                 variables[step.order] = step.exec_function(inputs,
                                                            values=step.values)
             except Exception as error:
                 error_list.append((step, type(error), error.args))
         if step:
-            output = variables.get(step.order, image)
+            output = _get_variable(step.order)
         else:
             output = image
         if errors:
-            return variables[step.order], error_list
+            return output, error_list
         else:
-            return variables[step.order]
+            return output
 
 
 class CustomStepForm(ModelForm):
