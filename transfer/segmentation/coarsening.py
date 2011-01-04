@@ -10,6 +10,7 @@
 # Shape context: http://en.wikipedia.org/wiki/Shape_context
 #
 #####################################################################
+
 import Image
 import networkx as nx
 import numpy
@@ -17,10 +18,37 @@ import pickle
 from random import randint
 import sys
 
-from node_extraction import Graph, Node
-from utils import binarize, thumbnail
+from node_extraction import *
+from utils import binarize, thumbnail, pil2np
 
 BACKGROUND_COLOR = 255
+
+
+def coarse(im_color):
+    # Create numpy array from image
+    width, height = im_color.size
+    if height > 1000:
+        im_color = thumbnail(im_color, 1000)
+    # Binarization
+    im = binarize(im_color)
+    I = pil2np(im)
+    width, height = I.shape
+    width, height = im.size
+    table_width, table_height = I.shape
+    if table_width != width:
+        I = numpy.transpose(I)
+    graph = detect_elements_in_array(I)
+    graph.compute_properties(width, height)
+    image = Image.new("RGB", (width, height), (255, 255, 255))
+    for node in graph.nodes:
+        if node.marked:
+            coarsed_graph = coarsening(node.create_tile(), 100)
+            for node_id in coarsed_graph.nodes():
+                color = coarsed_graph.node[node_id]['node'].color
+                for i,j in coarsed_graph.node[node_id]['node'].pixels:
+                    ominw, omaxw, ominh, omaxh = node.get_min_max_coordinates()
+                    image.putpixel((i+ominw, j+ominh), color)
+    return image
 
 def coarsening(im, tau):
     """
@@ -68,7 +96,7 @@ def coarsening(im, tau):
             graph.add_edge(node_id, edge)
         
         graph.remove_node(a)
-        try: #FIXME Some nodes remain and get related with themselves
+        try:
             graph.remove_node(b)
         except:
             pass
@@ -111,32 +139,25 @@ def coarsening(im, tau):
                     graph.add_edge(node_id, '%d-%d' % (i+1,j-1))
                 if i>0 and j<height-1 and im.getpixel((i-1,j+1)) != BACKGROUND_COLOR:
                     graph.add_edge(node_id, '%d-%d' % (i-1,j+1))
-    
                 # Append node to the processing queue
                 queue.append(node_id)
     
-    #print len(graph.nodes())
-    #merge_initial_nodes(graph)
-    #print len(graph.nodes())
     graph.node[node_id]
     image = Image.new("RGB", (width, height), (255, 255, 255))
     for node_id in graph.nodes():
         node = graph.node[node_id]['node']
         node.update_local_properties()
-        #pixel = graph.node[node_id]['node'].pixels[0]
-        #color = graph.node[node_id]['node'].color
         pixel = node.pixels[0]
         color = node.color
         image.putpixel(pixel, color)
-    image.save('output1.png', "PNG")
+    # image.save('output1.png', "PNG")
     # Iteration loop
-    iters = 0 # FIXME Isolated nodes?
-    while not coarsened(graph, tau) and iters<20:
+    iters = 0
+    while not coarsened(graph, tau) and iters<50:
         iters += 1
         # 1: Check the size (the number of pixels) m of every node in the
         # queue Q, if m > T is satisfied for all nodes, then stop, otherwise
         # continue
-        print len(queue)
         structural_graph = Graph()
         for node_id in graph.nodes():
             structural_graph.nodes.append(graph.node[node_id]['node'])
@@ -171,7 +192,6 @@ def coarsening(im, tau):
                 #    candidates.append(merge_candidate_nodes(graph, node_id, neighbor))
         # 5: User Equation 4 to identify optimal neighbor Ni, and store merged
         # node Ni+j, at the end of Q
-                #FIXME Use real values instead of random
                 degree = len(neighbors)
                 if degree == 0:
                     continue
@@ -182,20 +202,16 @@ def coarsening(im, tau):
                     proximity = abs(mu - neighbors[i][1])/(4*neighbors[i][2])
                     # More weight to horizontal nodes
                     if node_i.is_horizontal(graph.node[neighbor]['node']):
-                        print 'Its horizontal'
                         proximity /= 50
                     if  proximity < min_value:
                         min_value = proximity
                         index = i
-                #index = randint(0, degree-1)
-                #print 'Index', index, degree
-                print min_value
                 if min_value > 0.25:
                     continue
                 try:
                     new_node = neighbors[index][0]
                 except:
-                    import ipdb;ipdb.set_trace()
+                    pass
                 new_id = merge_nodes(graph, node_id, new_node)
                 queue.append(new_id)
         # 6: Remove Ni and Nj from the queue Q, and update neighbors relations
@@ -205,5 +221,4 @@ def coarsening(im, tau):
                     queue.remove(node_id)
         # 7: Go to step 1
     return graph
-
 
