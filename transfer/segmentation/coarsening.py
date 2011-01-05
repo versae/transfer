@@ -24,11 +24,11 @@ from utils import binarize, thumbnail, pil2np
 BACKGROUND_COLOR = 255
 
 
-def coarse(im_color, tau=100):
+def coarse(im_color, tau=100, max_heigth=1000):
     # Create numpy array from image
     width, height = im_color.size
-    if height > 1000:
-        im_color = thumbnail(im_color, 1000)
+    if height > max_heigth:
+        im_color = thumbnail(im_color, max_heigth)
     # Binarization
     im = binarize(im_color)
     I = pil2np(im)
