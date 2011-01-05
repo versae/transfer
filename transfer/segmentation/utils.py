@@ -490,7 +490,7 @@ def draw_overlay(original_image, mask_image, colour=(255, 0, 0)):
 
 
 # Based on http://www.ece.umassd.edu/faculty/acosta/icassp/icassp_2004/pdfs/0300229.pdf
-def activity_detector(im, radius=10, increment=16):
+def activity_detector(im, radius=10, increment=16, accumulative=True):
     regions = find_regions(im)
     width, height = im.size
     mask = Image.new("L", (width, height), 0)
@@ -500,7 +500,10 @@ def activity_detector(im, radius=10, increment=16):
         for x in range(min_x - radius, max_x + radius + 1):
             for y in range(min_y - radius, max_y + radius + 1):
                 try:
-                    pixels[x, y] += increment
+                    if accumulative:
+                        pixels[x, y] += increment
+                    else:
+                        pixels[x, y] = increment
                 except IndexError:
                     pass
     return mask
