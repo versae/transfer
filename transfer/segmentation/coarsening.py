@@ -24,7 +24,7 @@ from utils import binarize, thumbnail, pil2np
 BACKGROUND_COLOR = 255
 
 
-def coarse(im_color):
+def coarse(im_color, tau=100):
     # Create numpy array from image
     width, height = im_color.size
     if height > 1000:
@@ -42,7 +42,7 @@ def coarse(im_color):
     image = Image.new("RGB", (width, height), (255, 255, 255))
     for node in graph.nodes:
         if node.marked:
-            coarsed_graph = coarsening(node.create_tile(), 100)
+            coarsed_graph = coarsening(node.create_tile(), tau)
             for node_id in coarsed_graph.nodes():
                 color = coarsed_graph.node[node_id]['node'].color
                 for i,j in coarsed_graph.node[node_id]['node'].pixels:
